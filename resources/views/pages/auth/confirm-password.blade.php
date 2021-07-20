@@ -1,36 +1,37 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+@extends('layouts.main')
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+@section('title','تایید پسورد')
+
+@section('content')
+    <div class="d-flex justify-content-center pt-5 mt-5">
+        <div class="col-md-8 pt-5 mt-5">
+            <div class="card">
+                <div class="card-header">
+                    تایید پسورد
+                </div>
+                <div class="card-body">
+                    @include('partials.alerts')
+
+                    <p>
+                        لطفا پسورد خود را تایید کنید
+                    </p>
+
+                    <form method="POST" action="{{ route('password.confirm') }}">
+                        @csrf
+
+                        <div class="form-group">
+                            <label for="password" class="mb-2">پسورد</label>
+                            <input type="password" class="form-control" placeholder="پسورد خود را وارد کنید"
+                                   name="password" id="password">
+                        </div>
+
+                        <button class="btn btn-success w-100 mb-2">
+                            تایید پسورد
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
+    </div>
+@endsection
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
-        <form method="POST" action="{{ route('password.confirm') }}">
-            @csrf
-
-            <!-- Password -->
-            <div>
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
-            </div>
-
-            <div class="flex justify-end mt-4">
-                <x-button>
-                    {{ __('Confirm') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>

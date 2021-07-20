@@ -1,33 +1,34 @@
 @extends('layouts.main')
 
+@section('title','تایید آدرس ایمیل')
+
 @section('content')
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-    </div>
+    <div class="d-flex justify-content-center pt-5 mt-5">
+        <div class="col-md-8 pt-5 mt-5">
+            <div class="card">
+                <div class="card-header">
+                    تایید آدرس ایمیل
+                </div>
+                <div class="card-body">
+                    @include('partials.alerts')
 
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
-    @endif
+                    <p>
+                        ایمیل تایید برای شما ارسال شد، لطفا پوشه spam هم بررسی کنید
+                    </p>
 
-    <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('verification.send') }}">
-            @csrf
+                    <form method="POST" action="{{ route('verification.send') }}">
+                        @csrf
 
-            <div>
-                <x-button>
-                    {{ __('Resend Verification Email') }}
-                </x-button>
+                        <button class="btn btn-success w-100 mb-2">
+                            دریافت دوباره ایمیل تایید
+                        </button>
+
+                        <a class="pt-4" href="{{ route('logout') }}">
+                            خروج
+                        </a>
+                    </form>
+                </div>
             </div>
-        </form>
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-
-            <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900">
-                {{ __('Log Out') }}
-            </button>
-        </form>
+        </div>
     </div>
 @endsection

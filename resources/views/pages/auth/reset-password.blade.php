@@ -1,48 +1,45 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+@extends('layouts.main')
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+@section('title','تایید بازیابی رمز عبور')
 
-        <form method="POST" action="{{ route('password.update') }}">
-            @csrf
+@section('content')
+    <div class="d-flex justify-content-center pt-5 mt-5">
+        <div class="col-md-8 pt-5 mt-5">
+            <div class="card">
+                <div class="card-header">
+                    تایید بازیابی رمز عبور
+                </div>
+                <div class="card-body">
+                    @include('partials.alerts')
+                    <form method="POST" action="{{ route('password.update') }}">
+                        @csrf
 
-            <!-- Password Reset Token -->
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                        <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
+                        <div class="form-group mb-3">
+                            <label for="email" class="mb-2">ایمیل</label>
+                            <input type="email" class="form-control" placeholder="ایمیل خود را وارد کنید" name="email"
+                                   id="email" value="{{old('email', request('email'))}}">
+                        </div>
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus />
+                        <div class="form-group mb-3">
+                            <label for="password" class="mb-2">پسورد</label>
+                            <input type="password" class="form-control" placeholder="پسورد خود را وارد کنید"
+                                   name="password" id="password">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="password_confirmation" class="mb-2">تکرار پسورد</label>
+                            <input type="password" class="form-control" placeholder="پسورد خود را دوباره وارد کنید"
+                                   name="password_confirmation" id="password_confirmation">
+                        </div>
+
+                        <button class="btn btn-success w-100 mb-2">
+                            تغییر رمز عبور
+                        </button>
+                    </form>
+                </div>
             </div>
-
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required />
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                <x-input id="password_confirmation" class="block mt-1 w-full"
-                                    type="password"
-                                    name="password_confirmation" required />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Reset Password') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+        </div>
+    </div>
+@endsection

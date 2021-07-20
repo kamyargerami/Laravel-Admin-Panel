@@ -22,3 +22,10 @@
         {{session('success')}}
     </div>
 @endif
+
+@if (session('status'))
+    <div class="alert alert-primary alert-dismissible fade show">
+        <button type="button" class="btn-close" data-dismiss="alert"></button>
+        {{session('status')}}
+    </div>
+@endif
