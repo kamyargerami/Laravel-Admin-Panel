@@ -7,7 +7,7 @@
         <div class="sidebar-brand">
             <a href="/">
                 <img src="{{asset('images/logo-light.png')}}" class="img-fluid" width="35px">
-                <span class="font-22 mr-2 text-white">بی‌بیم شو</span>
+                <span class="font-22 mr-2 text-white">آرسام سافت</span>
             </a>
             <div id="close-sidebar">
                 <i class="fa fa-times"></i>
@@ -53,7 +53,7 @@
     </div>
 
     <div class="sidebar-footer">
-        <a href="https://bibimsho.ir">
+        <a href="">
             <i class="fa fa-home"></i>
         </a>
         <a href="{{route('logout')}}">

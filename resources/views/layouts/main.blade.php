@@ -16,7 +16,7 @@
 </head>
 <body>
 
-<div class="container responsive-custom">
+<div class="container">
     @yield('content')
 </div>
 
