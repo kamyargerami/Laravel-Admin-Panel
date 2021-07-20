@@ -1,0 +1,103 @@
+$body-bg: #f8fafc;
+$body-align: right;
+$body-dir: rtl;
+
+// Typography
+$font-family-fa-num: 'IRANSansFaNum', Arial;
+$font-family: 'IRANSans', Arial;
+
+body {
+    font-family: $font-family-fa-num;
+    direction: $body-dir !important;
+    text-align: $body-align !important;
+    background-color: $body-bg;
+}
+
+input {
+    font-family: $font-family;
+}
+
+.fa-num {
+    font-family: $font-family-fa-num !important;
+}
+
+.en-num {
+    font-family: $font-family !important;
+}
+
+.tooltip {
+    font-family: $font-family;
+}
+
+.form-check-input {
+    margin-left: auto;
+    margin-right: -1.25rem;
+}
+
+.form-check {
+    padding-left: auto;
+    padding-right: 1.25rem;
+}
+
+.dropdown-menu {
+    text-align: right !important;
+    right: 0 !important;
+}
+
+.ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.radius-5 {
+    border-radius: 10px;
+}
+
+.radius-10 {
+    border-radius: 10px;
+}
+
+.bg-grey {
+    background-color: #eee;
+}
+
+.ltr {
+    direction: ltr !important;
+}
+
+.no-decoration {
+    text-decoration: none;
+}
+
+.margin-top-half {
+    margin-top: 25vh;
+}
+
+.modal-header .btn-close {
+    margin: -.5rem auto -.5rem -.5rem;
+}
+
+.table-responsive {
+    min-height: 40vh;
+}
+
+.whitespace-nowrap {
+    white-space: nowrap;
+}
+
+.no-arrow {
+    -moz-appearance: textfield;
+}
+
+.no-arrow::-webkit-outer-spin-button, .no-arrow::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/*menu items*/
+
+.menu-item-active {
+    color: cornflowerblue;
+    border: cornflowerblue solid 1.5px !important;
+}

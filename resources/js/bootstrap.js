@@ -6,10 +6,13 @@ window._ = require('lodash');
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+try {
+    window.$ = window.jQuery = require('jquery');
+    window.Popper = require('@popperjs/core').default;
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
+    window.bootstrap = require('bootstrap');
+} catch (e) {
+}
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
