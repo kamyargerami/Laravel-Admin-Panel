@@ -22,7 +22,7 @@ class UserController extends Controller
         $order_by = Helper::orderBy($request->order_by);
 
         $users = User::where(function ($query) use ($request) {
-            foreach (['id', 'name', 'email', 'provider'] as $column) {
+            foreach (['id', 'name', 'email'] as $column) {
                 if ($request->get($column)) {
                     $query->where($column, $request->get($column));
                 }

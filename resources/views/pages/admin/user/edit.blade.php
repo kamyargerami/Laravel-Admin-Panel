@@ -19,12 +19,6 @@
 
     <div class="row">
         <div class="col-md-6">
-            <label>موبایل</label>
-            <input type="text" name="mobile" value="{{$user->mobile}}"
-                   class="form-control ltr" placeholder="شماره موبایل را هر جور که راحتید وارد کنید">
-        </div>
-
-        <div class="col-md-6">
             <label>ایمیل</label>
             <input type="email" name="email" value="{{$user->email}}"
                    class="form-control ltr"
