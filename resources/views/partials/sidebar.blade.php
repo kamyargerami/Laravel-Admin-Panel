@@ -40,14 +40,6 @@
                         </a>
                     </li>
                 @endcan
-                @can('admin.conversation.index')
-                    <li>
-                        <a href="{{route('admin.conversation.index')}}">
-                            <i class="fa fa-comment"></i>
-                            <span>پیام ها</span>
-                        </a>
-                    </li>
-                @endcan
             </ul>
         </div>
     </div>
