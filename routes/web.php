@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect()->route('admin.index');
 });
+
+Route::get('download', 'User\DownloadController@download');
