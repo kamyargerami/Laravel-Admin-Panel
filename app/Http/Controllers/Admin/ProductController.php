@@ -27,9 +27,11 @@ class ProductController extends Controller
 
     public function store(AddProductRequest $request)
     {
-        Product::create([
+        $product = Product::create([
             'name' => $request->name
         ]);
+
+        LogService::log('new_product', $product, auth()->id(), ['name' => $request->name]);
 
         return back()->with('success', 'محصول جدید با موفقیت اضافه شد');
     }
