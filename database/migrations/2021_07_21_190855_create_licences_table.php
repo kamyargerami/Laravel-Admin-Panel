@@ -13,11 +13,11 @@ class CreateLicencesTable extends Migration
      */
     public function up()
     {
-        Schema::create('licences', function (Blueprint $table) {
+        Schema::create('licenses', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('user_id')->nullable();
-            $table->enum('type', \App\Models\Licence::Status);
+            $table->enum('type', \App\Models\License::Types);
             $table->string('key');
             $table->timestamps();
         });
@@ -30,6 +30,6 @@ class CreateLicencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('licences');
+        Schema::dropIfExists('licenses');
     }
 }

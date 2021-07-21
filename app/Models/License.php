@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Licence extends Model
+class License extends Model
 {
     use HasFactory;
 
-    const Status = ['yearly', 'trial'];
+    const Types = ['yearly', 'trial'];
 
     protected $guarded = [];
 
