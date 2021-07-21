@@ -18,7 +18,9 @@ class DownloadController extends Controller
             return response([
                 'message' => 'The given data was invalid.',
                 'errors' => [
-                    'file' => 'File not exist in this path.'
+                    'file' => [
+                        'File not exist in this path.'
+                    ]
                 ]
             ], 404);
         }
