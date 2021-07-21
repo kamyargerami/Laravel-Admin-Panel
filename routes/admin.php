@@ -25,6 +25,8 @@ Route::group(['prefix' => 'log'], function () {
 
 Route::group(['prefix' => 'product'], function () {
     Route::get('/', 'ProductController@index')->name('product.list');
+    Route::get('add', 'ProductController@add')->name('product.add');
+    Route::post('add', 'ProductController@store')->name('product.store');
     Route::get('edit/{product}', 'ProductController@edit')->name('product.edit');
     Route::post('edit/{product}', 'ProductController@update')->name('product.update');
 });

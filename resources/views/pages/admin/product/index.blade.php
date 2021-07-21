@@ -12,7 +12,10 @@
                     </p>
                 </div>
                 <div class="col-3">
-                    <button class="btn btn-sm btn-primary pull-left">
+                    <button class="btn btn-sm btn-primary pull-left" data-bs-toggle="modal"
+                            data-bs-target="#defaultModal"
+                            data-path="{{ route('admin.product.add') }}"
+                            data-title="افزودن محصول">
                         <i class="fa fa-plus ps-0 ps-lg-1"></i>
                         <span class="d-none d-lg-inline-block">
                             افزودن محصول
