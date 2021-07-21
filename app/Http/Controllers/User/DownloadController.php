@@ -16,9 +16,10 @@ class DownloadController extends Controller
 
         if (!Storage::exists($file_path)) {
             return response([
-                'status' => 'error',
-                'message' => 'file not found',
-                'code' => 404
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'file' => 'File not exist in this path.'
+                ]
             ], 404);
         }
 
