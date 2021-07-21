@@ -58,7 +58,7 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-secondary dropdown-toggle"
+                                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"
                                             data-bs-toggle="dropdown">
                                         عملیات
                                     </button>
@@ -83,8 +83,11 @@
                     @endforeach
                 </table>
             </div>
-
-            @include('partials.paginate',['pages'=>$users])
         </div>
+        @if($users->lastPage() > 1 and $users->lastPage() <= $users->currentPage())
+            <div class="card-header">
+                @include('partials.paginate', ['pages' => $users])
+            </div>
+        @endif
     </div>
 @endsection

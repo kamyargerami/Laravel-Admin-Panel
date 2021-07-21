@@ -16,6 +16,14 @@
 
         <div class="sidebar-menu">
             <ul>
+                @can('admin.product.list')
+                    <li>
+                        <a href="{{route('admin.product.list')}}">
+                            <i class="fa fa-product-hunt"></i>
+                            <span>محصولات</span>
+                        </a>
+                    </li>
+                @endcan
                 @can('admin.user.list')
                     <li>
                         <a href="{{route('admin.user.list')}}">

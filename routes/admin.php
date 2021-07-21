@@ -22,3 +22,9 @@ Route::group(['prefix' => 'log'], function () {
     Route::get('show/{type}/{id}', 'LogController@show')->name('log');
     Route::get('details/{log}', 'LogController@details')->name('log.details');
 });
+
+Route::group(['prefix' => 'product'], function () {
+    Route::get('/', 'ProductController@index')->name('product.list');
+    Route::get('edit/{product}', 'ProductController@edit')->name('product.edit');
+    Route::post('edit/{product}', 'ProductController@update')->name('product.update');
+});

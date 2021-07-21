@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title','گزارشات')
+@section('title', 'گزارشات')
 
 @section('content')
     <div class="card">
@@ -32,8 +32,11 @@
                     </tbody>
                 </table>
             </div>
-
-            @include('partials.paginate',['pages' => $logs])
         </div>
+        @if($logs->lastPage() > 1 and $logs->lastPage() <= $logs->currentPage())
+            <div class="card-footer">
+                @include('partials.paginate',['pages' => $logs])
+            </div>
+        @endif
     </div>
 @endsection
