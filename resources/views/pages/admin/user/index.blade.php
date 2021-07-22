@@ -7,18 +7,18 @@
         <div class="card-header">
             <form>
                 <div class="row">
-                    <div class="col-md-3 mb-2">
+                    <div class="col-md-1 mb-2">
                         <input type="text" name="id" placeholder="ID" value="{{request('id')}}" class="form-control">
                     </div>
                     <div class="col-md-3 mb-2">
                         <input type="text" name="name" placeholder="نام" value="{{request('name')}}"
                                class="form-control">
                     </div>
-                    <div class="col-md-3 mb-2">
+                    <div class="col-md-2 mb-2">
                         <input type="text" name="email" placeholder="ایمیل" value="{{request('email')}}"
                                class="form-control">
                     </div>
-                    <div class="col-md-3 mb-2">
+                    <div class="col-md-2 mb-2">
                         @include('partials.order-by',['order_by' => ['created_at','updated_at','visit','price']])
                     </div>
                     <div class="col-md-2">
@@ -27,6 +27,11 @@
                     <div class="col-md-1">
                         <a href="{{route('admin.user.list')}}" class="btn btn-warning w-100">
                             <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="{{route('admin.user.list')}}" class="btn btn-success w-100">
+                            <i class="fa fa-plus"></i>
                         </a>
                     </div>
                 </div>

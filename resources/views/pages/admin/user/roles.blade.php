@@ -11,16 +11,16 @@
                         <input type="text" name="id" placeholder="ID" class="form-control"
                                value="{{request('id')}}">
                     </div>
-                    <div class="col-md-3 me-auto">
+                    <div class="col-md-3">
                         <input type="text" name="name" placeholder="نام نقش" class="form-control"
                                value="{{request('name')}}">
                     </div>
                     <div class="col-md-2">
                         <button class="btn btn-primary w-100">جستجو</button>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <a href="{{route('admin.user.roles')}}" class="btn btn-warning w-100">
-                            <i class="fa fa-times"></i>
+                            پاک کردن فرم
                         </a>
                     </div>
                     <div class="col-md-2">

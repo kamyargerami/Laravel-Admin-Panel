@@ -12,7 +12,7 @@
                     </p>
                 </div>
                 <div class="col-3">
-                    <button class="btn btn-sm btn-primary pull-left" data-bs-toggle="modal"
+                    <button class="btn btn-sm btn-success pull-left" data-bs-toggle="modal"
                             data-bs-target="#defaultModal"
                             data-path="{{ route('admin.license.add') }}"
                             data-title="افزودن لایسنس" data-confirm-text="افزودن">
