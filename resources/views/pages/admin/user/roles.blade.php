@@ -32,7 +32,7 @@
                         <td>{{$role->id}}</td>
                         <td>{{__('roles.' . $role->name)}}</td>
                         <td>
-                            <button class="btn btn-dark btn-sm" data-bs-toggle="modal"
+                            <button class="btn btn-secondary btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#defaultModal"
                                     data-path="{{ route('admin.user.permissions', $role->id) }}"
                                     data-title="مجوز ها" type="button"

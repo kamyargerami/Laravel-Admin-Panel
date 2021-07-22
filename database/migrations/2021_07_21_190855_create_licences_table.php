@@ -21,6 +21,7 @@ class CreateLicencesTable extends Migration
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('user_id')->nullable();
             $table->timestamps();
+            $table->unique(['key', 'product_id'], 'key_product_unique');
         });
     }
 
