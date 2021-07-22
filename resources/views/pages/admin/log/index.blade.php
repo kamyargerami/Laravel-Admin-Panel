@@ -4,6 +4,9 @@
 
 @section('content')
     <div class="card">
+        <div class="card-header">
+            گزارشات
+        </div>
         <div class="card-body">
             <div class="table-responsive table-bordered">
                 <table class="table">
@@ -22,7 +25,7 @@
                             <td>{{$log->user ? $log->user->name : '--'}}</td>
                             <td>{{\Morilog\Jalali\Jalalian::fromDateTime($log->created_at)}}</td>
                             <td>
-                                <a href="{{route('admin.log.details',$log->id)}}" class="btn btn-primary btn-sm"
+                                <a href="{{route('admin.log.details',$log->id)}}" class="btn btn-secondary btn-sm"
                                    target="_blank">
                                     همه اطلاعات
                                 </a>

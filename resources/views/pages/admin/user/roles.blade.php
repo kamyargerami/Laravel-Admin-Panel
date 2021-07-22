@@ -5,32 +5,18 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form>
-                <div class="row">
-                    <div class="col-md-3">
-                        <input type="text" name="id" placeholder="ID" class="form-control"
-                               value="{{request('id')}}">
-                    </div>
-                    <div class="col-md-3">
-                        <input type="text" name="name" placeholder="نام نقش" class="form-control"
-                               value="{{request('name')}}">
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-primary w-100">جستجو</button>
-                    </div>
-                    <div class="col-md-2">
-                        <a href="{{route('admin.user.roles')}}" class="btn btn-warning w-100">
-                            پاک کردن فرم
-                        </a>
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#addRoleModal"
-                                type="button">
-                            افزودن نقش
-                        </button>
-                    </div>
+            <div class="row">
+                <div class="col-9">
+                    نقش های کاربری
                 </div>
-            </form>
+                <div class="col-3">
+                    <button class="btn btn-sm btn-success pull-left" data-bs-toggle="modal"
+                            data-bs-target="#addRoleModal"
+                            type="button">
+                        افزودن نقش
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="card-body">

@@ -46,7 +46,7 @@
                             <td>{{$license->used_count}}</td>
                             <td>{{$license->max_use}}</td>
                             <td>{{__('products.' . $license->product->name)}}</td>
-                            <td>{{$license->user->name}}</td>
+                            <td>{{$license->user->name ?? '---'}}</td>
                             <td>{{$license->key}}</td>
                             <td>{{\Morilog\Jalali\Jalalian::fromDateTime($license->created_at)}}</td>
                             <td>{{\Morilog\Jalali\Jalalian::fromDateTime($license->updated_at)}}</td>
