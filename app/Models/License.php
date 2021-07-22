@@ -18,8 +18,13 @@ class License extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function used_licenses()
+    public function used()
     {
         return $this->hasMany(UsedLicence::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

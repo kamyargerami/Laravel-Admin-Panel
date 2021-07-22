@@ -23,6 +23,14 @@ Route::group(['prefix' => 'log'], function () {
     Route::get('details/{log}', 'LogController@details')->name('log.details');
 });
 
+Route::group(['prefix' => 'license'], function () {
+    Route::get('/', 'LicenseController@index')->name('license.list');
+    Route::get('add', 'LicenseController@add')->name('license.add');
+    Route::post('add', 'LicenseController@store')->name('license.store');
+    Route::get('edit/{product}', 'LicenseController@edit')->name('license.edit');
+    Route::post('edit/{product}', 'LicenseController@update')->name('license.update');
+});
+
 Route::group(['prefix' => 'product'], function () {
     Route::get('/', 'ProductController@index')->name('product.list');
     Route::get('add', 'ProductController@add')->name('product.add');

@@ -16,6 +16,14 @@
 
         <div class="sidebar-menu">
             <ul>
+                @can('admin.license.list')
+                    <li>
+                        <a href="{{route('admin.license.list')}}">
+                            <i class="fa fa-copyright"></i>
+                            <span>لایسنس</span>
+                        </a>
+                    </li>
+                @endcan
                 @can('admin.product.list')
                     <li>
                         <a href="{{route('admin.product.list')}}">

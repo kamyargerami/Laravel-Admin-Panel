@@ -15,8 +15,8 @@ class CreateLicencesTable extends Migration
     {
         Schema::create('licenses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedSmallInteger('max_use');
             $table->enum('type', \App\Models\License::Types);
+            $table->unsignedSmallInteger('max_use');
             $table->string('key');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('user_id')->nullable();

@@ -33,7 +33,7 @@
                                    name="password" id="password">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="password_confirmation" class="mb-2">تکرار پسورد</label>
                             <input type="password" class="form-control" placeholder="پسورد خود را دوباره وارد کنید"
                                    name="password_confirmation" id="password_confirmation">
