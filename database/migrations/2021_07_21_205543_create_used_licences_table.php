@@ -22,10 +22,10 @@ class CreateUsedLicencesTable extends Migration
             $table->string('email');
             $table->string('country');
             $table->string('city');
-            $table->string('company');
             $table->string('version');
             $table->string('device_name');
             $table->string('fingerprint');
+            $table->string('company')->nullable();
             $table->timestamps();
         });
     }

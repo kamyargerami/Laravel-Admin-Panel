@@ -6,8 +6,8 @@
     <div class="sidebar-content">
         <div class="sidebar-brand">
             <a href="/">
-                <img src="{{asset('images/logo-light.png')}}" class="img-fluid" width="35px">
-                <span class="font-22 mr-2 text-white">پنل ادمین</span>
+                <img src="{{asset('images/logo-light.png')}}" class="img-fluid ms-2" width="35px">
+                <span class="font-22 text-white">آرسام سافت</span>
             </a>
             <div id="close-sidebar">
                 <i class="fa fa-times"></i>
