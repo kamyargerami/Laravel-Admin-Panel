@@ -36,7 +36,7 @@
                 <label for="status">وضعیت</label>
                 <select name="status" id="status" class="form-select mt-1">
                     <option value="1" {{$license->status ? 'selected' : ''}}>فعال</option>
-                    <option value="0">غیر فعال</option>
+                    <option value="0" {{!$license->status ? 'selected' : ''}}>غیر فعال</option>
                 </select>
             </div>
         </div>
