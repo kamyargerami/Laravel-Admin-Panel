@@ -69,11 +69,19 @@ class LicenseController extends Controller
 
     public function update(License $license, UpdateLicenceRequest $request)
     {
-        $license->update($request->validated());
+        $data = [];
+        foreach ($request->validated() as $key => $value) {
+            if ($license->$key != $value) {
+                $data[$key] = $value;
+            }
+        }
 
-        LogService::log('license_updated', $license, auth()->id(), $request->validated());
+        if (count($data)) {
+            $license->update($data);
+            LogService::log('license_updated', $license, auth()->id(), $data);
+        }
 
-        return back()->with('success', 'محصول با موفقیت ویرایش شد');
+        return back()->with('success', 'لایسنس با موفقیت ویرایش شد');
     }
 
     function randomString($length = 25)
