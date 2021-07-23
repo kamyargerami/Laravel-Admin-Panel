@@ -65,7 +65,8 @@
                 </div>
 
                 <div class="col-lg-2 mb-2 mb-lg-0">
-                    <button type="button" class="btn btn-outline-success pull-left w-100" id="assign_btn">
+                    <button type="button" class="btn btn-outline-success pull-left w-100"
+                            data-bs-toggle="modal" data-bs-target="#multiUpdateModal">
                         تغییر ادمین / نماینده
                         <i class="fa fa-link pe-2"></i>
                     </button>
@@ -142,12 +143,44 @@
             @include('partials.paginate', ['pages' => $licenses])
         </div>
     </div>
+
+    <div class="modal fade" id="multiUpdateModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">ویرایش گروهی ادمین / نماینده</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-danger">
+                        توجه: همه نتایج جستجو فعلی شامل این تغییر میشود.
+                    </p>
+
+                    <div class="form-group mt-3">
+                        <select name="new_user_id" id="new_user_id" class="form-select mt-1">
+                            @foreach($users as $user)
+                                <option value="{{$user->id}}">{{$user->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                    <button type="submit" class="btn btn-primary" id="multi_update_btn">تغییر گروهی</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
     <script>
         $('#export_btn').click(function () {
             window.location = '/admin/license/export?' + $('form').serialize();
+        });
+
+        $('#multi_update_btn').click(function () {
+            window.location = '/admin/license/multi-update?' + $('form').serialize() + '&new_user_id=' + $('#new_user_id').val();
         });
     </script>
 @endsection

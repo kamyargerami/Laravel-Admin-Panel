@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AddLicenceRequest;
+use App\Http\Requests\Admin\MultiUpdateRequest;
 use App\Http\Requests\Admin\UpdateLicenceRequest;
 use App\Models\License;
 use App\Models\Product;
@@ -118,5 +119,22 @@ class LicenseController extends Controller
             'Cache-Control' => 'no-store, no-cache',
             'Content-Disposition' => 'attachment; filename="export_' . Carbon::now()->timestamp . '.csv"',
         ]);
+    }
+
+    public function multiUpdate(MultiUpdateRequest $request)
+    {
+        $this->getResultQuery($request)->chunk(200, function ($licenses) use ($request) {
+            foreach ($licenses as $license) {
+                if ($license->user_id != $request->new_user_id) {
+                    $license->update([
+                        'user_id' => $request->new_user_id
+                    ]);
+
+                    LogService::log('license_updated', $license, auth()->id(), ['user_id' => $request->new_user_id]);
+                }
+            }
+        });
+
+        return back()->with('success', 'لایسنس های مورد نظر ویرایش شدند.');
     }
 }

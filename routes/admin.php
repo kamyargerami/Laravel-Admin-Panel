@@ -30,6 +30,7 @@ Route::group(['prefix' => 'license'], function () {
     Route::get('edit/{license}', 'LicenseController@edit')->name('license.edit');
     Route::post('edit/{license}', 'LicenseController@update')->name('license.update');
     Route::get('export', 'LicenseController@export')->name('license.export');
+    Route::get('multi-update', 'LicenseController@multiUpdate')->name('license.multi-update');
 });
 
 Route::group(['prefix' => 'product'], function () {
