@@ -33,9 +33,12 @@
                         </a>
                     </div>
                     <div class="col-md-1 mb-2 mb-lg-0">
-                        <a href="{{route('admin.user.list')}}" class="btn btn-success w-100">
+                        <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
+                                data-bs-target="#defaultModal"
+                                data-path="{{ route('admin.user.add') }}"
+                                data-title="افزودن کاربر" data-confirm-text="افزودن">
                             <i class="fa fa-plus"></i>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </form>

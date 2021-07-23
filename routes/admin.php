@@ -6,15 +6,15 @@ Route::get('/', 'PagesController@index')->name('index');
 
 Route::group(['prefix' => 'user'], function () {
     Route::get('list', 'UserController@index')->name('user.list');
+    Route::get('add', 'UserController@add')->name('user.add');
+    Route::post('add', 'UserController@store')->name('user.store');
+    Route::get('edit/{user}', 'UserController@edit')->name('user.edit');
+    Route::post('edit/{user}', 'UserController@update')->name('user.update');
 
     Route::get('roles', 'UserController@roles')->name('user.roles');
     Route::post('roles', 'UserController@addRole')->name('user.add-role');
-
     Route::get('permissions/{role_id}', 'UserController@permissions')->name('user.permissions');
     Route::post('permissions/{role_id}', 'UserController@updatePermissions')->name('user.update-permissions');
-
-    Route::get('edit/{user}', 'UserController@edit')->name('user.edit');
-    Route::post('edit/{user}', 'UserController@update')->name('user.update');
 });
 
 Route::group(['prefix' => 'log'], function () {
