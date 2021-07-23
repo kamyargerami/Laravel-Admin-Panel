@@ -16,7 +16,7 @@
                 <p>درحال بارگذاری...</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-dark text-white" data-dismiss="modal">
+                <button type="button" class="btn btn-dark text-white" data-bs-dismiss="modal">
                     <span>بستن</span>
                 </button>
                 <button type="button"

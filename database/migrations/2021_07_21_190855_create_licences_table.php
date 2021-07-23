@@ -22,7 +22,7 @@ class CreateLicencesTable extends Migration
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('user_id');
             $table->timestamps();
-            $table->timestamp('expires_at')->nullable();
+            $table->date('expires_at')->nullable();
             $table->softDeletes();
             $table->unique(['key', 'product_id'], 'key_product_unique');
         });

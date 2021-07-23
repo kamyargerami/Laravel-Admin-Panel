@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AddLicenceRequest;
-use App\Http\Requests\Admin\UpdateProductRequest;
+use App\Http\Requests\Admin\UpdateLicenceRequest;
 use App\Models\License;
 use App\Models\Product;
 use App\Models\User;
@@ -67,13 +67,11 @@ class LicenseController extends Controller
         return view('pages.admin.license.edit', compact('license', 'products', 'users'));
     }
 
-    public function update(Product $product, UpdateProductRequest $request)
+    public function update(License $license, UpdateLicenceRequest $request)
     {
-        $product->update([
-            'name' => $request->name
-        ]);
+        $license->update($request->validated());
 
-        LogService::log('product_updated', $product, auth()->id(), ['new_name' => $request->name]);
+        LogService::log('license_updated', $license, auth()->id(), $request->validated());
 
         return back()->with('success', 'محصول با موفقیت ویرایش شد');
     }

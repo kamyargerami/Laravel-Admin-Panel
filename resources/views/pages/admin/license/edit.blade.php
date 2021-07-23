@@ -30,11 +30,30 @@
                value="{{$license->max_use}}">
     </div>
 
-    <div class="form-group mb-3">
-        <label for="status">وضعیت</label>
-        <select name="status" id="status" class="form-select mt-1">
-            <option value="1" {{$license->status ? 'selected' : ''}}>فعال</option>
-            <option value="0">غیر فعال</option>
-        </select>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group mb-3">
+                <label for="status">وضعیت</label>
+                <select name="status" id="status" class="form-select mt-1">
+                    <option value="1" {{$license->status ? 'selected' : ''}}>فعال</option>
+                    <option value="0">غیر فعال</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group mb-3">
+                <label for="pdpGregorian">تاریخ انقضا</label>
+                <input type="text" placeholder="تاریخ انقضا" name="expires_at" id="pdpGregorian"
+                       class="form-control mt-1" value="{{$license->expires_at}}">
+            </div>
+        </div>
     </div>
 </form>
+
+<script>
+    var pd = $("#pdpGregorian").persianDatepicker({
+        showGregorianDate: true,
+        formatDate: "YYYY-0M-0D",
+        observer: true,
+    });
+</script>
