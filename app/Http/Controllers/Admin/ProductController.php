@@ -51,4 +51,19 @@ class ProductController extends Controller
 
         return back()->with('success', 'محصول با موفقیت ویرایش شد');
     }
+
+    public function delete(Product $product)
+    {
+        $count_used_licences = $product->licenses()->count();
+
+        if ($count_used_licences) {
+            return back()->withErrors(['این محسول لایسنس دارد و شما مجاز به حذف آن نیستید، ابتدا رکورد مشتریان این لایسنس را پاک کنید']);
+        }
+
+        LogService::log('product_deleted', $product, auth()->id());
+
+        $product->delete();
+
+        return back()->with('success', 'محصول با موفقیت حذف شد');
+    }
 }

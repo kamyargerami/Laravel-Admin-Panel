@@ -10,6 +10,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('add', 'UserController@store')->name('user.store');
     Route::get('edit/{user}', 'UserController@edit')->name('user.edit');
     Route::post('edit/{user}', 'UserController@update')->name('user.update');
+    Route::get('delete/{user}', 'UserController@delete')->name('user.delete');
 
     Route::get('roles', 'UserController@roles')->name('user.roles');
     Route::post('roles', 'UserController@addRole')->name('user.add-role');
@@ -31,6 +32,7 @@ Route::group(['prefix' => 'license'], function () {
     Route::post('edit/{license}', 'LicenseController@update')->name('license.update');
     Route::get('export', 'LicenseController@export')->name('license.export');
     Route::get('multi-update', 'LicenseController@multiUpdate')->name('license.multi-update');
+    Route::get('delete/{license}', 'LicenseController@delete')->name('license.delete');
 });
 
 Route::group(['prefix' => 'product'], function () {
@@ -39,4 +41,5 @@ Route::group(['prefix' => 'product'], function () {
     Route::post('add', 'ProductController@store')->name('product.store');
     Route::get('edit/{product}', 'ProductController@edit')->name('product.edit');
     Route::post('edit/{product}', 'ProductController@update')->name('product.update');
+    Route::get('delete/{product}', 'ProductController@delete')->name('product.delete');
 });

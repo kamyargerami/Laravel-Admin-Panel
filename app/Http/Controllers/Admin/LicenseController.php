@@ -91,6 +91,21 @@ class LicenseController extends Controller
         return back()->with('success', 'لایسنس با موفقیت ویرایش شد');
     }
 
+    public function delete(License $license)
+    {
+        $count_used_licences = $license->used()->count();
+
+        if ($count_used_licences) {
+            return back()->withErrors(['این لایسنس مشتری دارد و شما مجاز به حذف آن نیستید، ابتدا رکورد مشتریان این لایسنس را پاک کنید']);
+        }
+
+        LogService::log('license_deleted', $license, auth()->id());
+
+        $license->delete();
+
+        return back()->with('success', 'لایسنس با موفقیت حذف شد');
+    }
+
     function randomString($length = 25)
     {
         $characters = '23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';

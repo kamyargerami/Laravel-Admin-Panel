@@ -58,6 +58,9 @@
                                            data-title=" لاگ های محصول {{$product->id}}">
                                             لاگ
                                         </a>
+                                        <a class="dropdown-item" href="{{route('admin.product.delete',$product->id)}}">
+                                            حذف
+                                        </a>
                                     </div>
                                 </div>
                             </td>

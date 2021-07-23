@@ -84,6 +84,18 @@ class UserController extends Controller
         return back()->with('success', 'کاربر با موفقیت ویرایش شد');
     }
 
+    public function delete(User $user)
+    {
+        if ($user->id == auth()->id())
+            return back()->withErrors(['شما نمیتوانید کاربر خودتان را حذف کنید.']);
+
+        LogService::log('user_deleted', $user, auth()->id());
+
+        $user->delete();
+
+        return back()->with('success', 'کاربر با موفقیت حذف شد');
+    }
+
     public function roles(Request $request)
     {
         $roles = Role::where(function ($query) use ($request) {

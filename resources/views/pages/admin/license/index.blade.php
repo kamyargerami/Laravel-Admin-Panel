@@ -131,6 +131,9 @@
                                            data-title=" لاگ های لایسنس {{$license->id}}">
                                             لاگ
                                         </a>
+                                        <a class="dropdown-item" href="{{route('admin.license.delete',$license->id)}}">
+                                            حذف
+                                        </a>
                                     </div>
                                 </div>
                             </td>

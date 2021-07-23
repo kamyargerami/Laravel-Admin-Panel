@@ -87,6 +87,9 @@
                                            data-title="لاگ های کاربر {{$user->id}}">
                                             لاگ
                                         </a>
+                                        <a class="dropdown-item" href="{{route('admin.user.delete',$user->id)}}">
+                                            حذف
+                                        </a>
                                     </div>
                                 </div>
                             </td>

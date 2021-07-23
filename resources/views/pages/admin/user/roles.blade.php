@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title','دسترسی ها')
+@section('title','نفش های کاربری')
 
 @section('content')
     <div class="card">

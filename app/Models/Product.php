@@ -11,4 +11,9 @@ class Product extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
+
+    public function licenses()
+    {
+        return $this->hasMany(License::class);
+    }
 }
