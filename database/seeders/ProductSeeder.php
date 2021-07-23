@@ -14,7 +14,7 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        foreach (['pav', 'pms', 'pmsp'] as $name) {
+        foreach (['Pav', 'Pms', 'Pmsp'] as $name) {
             Product::firstOrCreate(['name' => $name]);
         }
     }

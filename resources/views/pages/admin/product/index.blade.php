@@ -36,7 +36,7 @@
                     @foreach($products as $product)
                         <tr>
                             <td>{{$product->id}}</td>
-                            <td>{{__('products.' . $product->name)}}</td>
+                            <td>{{$product->name}}</td>
                             <td>{{\Morilog\Jalali\Jalalian::fromDateTime($product->updated_at)}}</td>
                             <td>
                                 <div class="btn-group" role="group">

@@ -13,7 +13,7 @@
                             @foreach($products as $product)
                                 <option
                                     value="{{$product->id}}" {{request('product_id') == $product->id ? 'selected' : ''}}>
-                                    {{__('products.' . $product->name)}}
+                                    {{$product->name}}
                                 </option>
                             @endforeach
                         </select>
@@ -36,7 +36,7 @@
                         @include('partials.order-by',['order_by' => ['created_at', 'updated_at', 'max_use', 'type']])
                     </div>
                     <div class="col-lg-2">
-                        <button class="btn btn-primary w-100">
+                        <button type="submit" class="btn btn-primary w-100">
                             جستجو
                         </button>
                     </div>
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <div class="col-lg-1">
-                        <button class="btn btn-success pull-left w-100" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-success pull-left w-100" data-bs-toggle="modal"
                                 data-bs-target="#defaultModal"
                                 data-path="{{ route('admin.license.add') }}"
                                 data-title="افزودن لایسنس" data-confirm-text="افزودن">
@@ -77,7 +77,7 @@
                             <td>{{__('types.license.' . $license->type)}}</td>
                             <td>{{$license->used_count}}</td>
                             <td>{{$license->max_use}}</td>
-                            <td>{{__('products.' . $license->product->name)}}</td>
+                            <td>{{$license->product->name}}</td>
                             <td>{{$license->user->name ?? '---'}}</td>
                             <td>{{$license->key}}</td>
                             <td>{{\Morilog\Jalali\Jalalian::fromDateTime($license->created_at)}}</td>

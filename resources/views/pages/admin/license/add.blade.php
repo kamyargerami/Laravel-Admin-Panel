@@ -6,7 +6,7 @@
         <select name="product_id" class="form-select mt-1" id="product_id" required>
             @foreach($products as $product)
                 <option value="{{$product->id}}">
-                    {{__('products.' . $product->name)}}
+                    {{$product->name}}
                 </option>
             @endforeach
         </select>

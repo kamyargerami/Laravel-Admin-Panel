@@ -43,7 +43,8 @@
                     </tr>
                 @endforeach
             </table>
-
+        </div>
+        <div class="card-footer">
             @include('partials.paginate',['pages' => $roles])
         </div>
     </div>
