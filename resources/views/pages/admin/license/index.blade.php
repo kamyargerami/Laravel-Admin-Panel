@@ -22,7 +22,7 @@
                         <select name="user_id" class="form-select">
                             <option value="">-- ادمین / نماینده --</option>
                             @foreach($users as $user)
-                                <option {{request('user_id') == $user->id ? 'selected' : ''}}>
+                                <option value="{{$user->id}}" {{request('user_id') == $user->id ? 'selected' : ''}} ش>
                                     {{$user->name}}
                                 </option>
                             @endforeach

@@ -16,22 +16,22 @@ use Illuminate\Support\Facades\Response;
 
 class LicenseController extends Controller
 {
-    public function getResult(Request $request)
+    public function getResultQuery(Request $request)
     {
-        $order_by = Helper::orderBy($request->order_by);
-
         return License::with('user', 'product')->where(function ($query) use ($request) {
             foreach (['id', 'user_id', 'product_id', 'key'] as $column) {
                 if ($request->get($column)) {
                     $query->where($column, $request->get($column));
                 }
             }
-        })->withCount('used')->orderBy($order_by[0], $order_by[1]);
+        });
     }
 
     public function index(Request $request)
     {
-        $licenses = $this->getResult($request)->paginate();
+        $order_by = Helper::orderBy($request->order_by);
+
+        $licenses = $this->getResultQuery($request)->withCount('used')->orderBy($order_by[0], $order_by[1])->paginate();
         $products = Product::all();
         $users = User::all();
 
@@ -107,7 +107,7 @@ class LicenseController extends Controller
     {
         $result = 'key,type,status,max_use,product,user,expires_at,created_at' . PHP_EOL;
 
-        $this->getResult($request)->chunk(200, function ($licenses) use (&$result) {
+        $this->getResultQuery($request)->chunk(200, function ($licenses) use (&$result) {
             foreach ($licenses as $license) {
                 $result .= $license->key . ',' . $license->type . ',' . $license->status . ',' . $license->max_use . ',' . $license->product->name . ',' . $license->user->name . ',' . $license->expires_at . ',' . $license->created_at . PHP_EOL;
             }
