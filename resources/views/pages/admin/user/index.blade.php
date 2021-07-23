@@ -7,29 +7,32 @@
         <div class="card-header">
             <form>
                 <div class="row">
-                    <div class="col-md-1 mb-2">
+                    <div class="col-md-1 mb-2 mb-lg-0">
                         <input type="text" name="id" placeholder="ID" value="{{request('id')}}" class="form-control">
                     </div>
-                    <div class="col-md-3 mb-2">
+                    <div class="col-md-3 mb-2 mb-lg-0">
                         <input type="text" name="name" placeholder="نام" value="{{request('name')}}"
                                class="form-control">
                     </div>
-                    <div class="col-md-2 mb-2">
+                    <div class="col-md-2 mb-2 mb-lg-0">
                         <input type="text" name="email" placeholder="ایمیل" value="{{request('email')}}"
                                class="form-control">
                     </div>
-                    <div class="col-md-2 mb-2">
+                    <div class="col-md-2 mb-2 mb-lg-0">
                         @include('partials.order-by',['order_by' => ['created_at','updated_at','visit','price']])
                     </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-primary w-100">جستجو</button>
+                    <div class="col-md-2 mb-2 mb-lg-0">
+                        <button class="btn btn-primary w-100">
+                            جستجو
+                            <i class="fa fa-search pe-2"></i>
+                        </button>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-1 mb-2 mb-lg-0">
                         <a href="{{route('admin.user.list')}}" class="btn btn-warning w-100">
                             <i class="fa fa-times"></i>
                         </a>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-1 mb-2 mb-lg-0">
                         <a href="{{route('admin.user.list')}}" class="btn btn-success w-100">
                             <i class="fa fa-plus"></i>
                         </a>

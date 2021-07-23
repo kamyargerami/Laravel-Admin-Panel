@@ -27,8 +27,8 @@ Route::group(['prefix' => 'license'], function () {
     Route::get('/', 'LicenseController@index')->name('license.list');
     Route::get('add', 'LicenseController@add')->name('license.add');
     Route::post('add', 'LicenseController@store')->name('license.store');
-    Route::get('edit/{product}', 'LicenseController@edit')->name('license.edit');
-    Route::post('edit/{product}', 'LicenseController@update')->name('license.update');
+    Route::get('edit/{license}', 'LicenseController@edit')->name('license.edit');
+    Route::post('edit/{license}', 'LicenseController@update')->name('license.update');
 });
 
 Route::group(['prefix' => 'product'], function () {

@@ -16,11 +16,13 @@ class CreateLicencesTable extends Migration
         Schema::create('licenses', function (Blueprint $table) {
             $table->id();
             $table->enum('type', \App\Models\License::Types);
+            $table->boolean('status')->default(1);
             $table->unsignedSmallInteger('max_use');
             $table->string('key');
             $table->unsignedInteger('product_id');
-            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('user_id');
             $table->timestamps();
+            $table->timestamp('expires_at')->nullable();
             $table->softDeletes();
             $table->unique(['key', 'product_id'], 'key_product_unique');
         });

@@ -36,10 +36,8 @@
                 </table>
             </div>
         </div>
-        @if($logs->lastPage() > 1 and $logs->lastPage() <= $logs->currentPage())
-            <div class="card-footer">
-                @include('partials.paginate',['pages' => $logs])
-            </div>
-        @endif
+        <div class="card-footer">
+            @include('partials.paginate',['pages' => $logs])
+        </div>
     </div>
 @endsection

@@ -1,18 +1,40 @@
-<form action="{{route('admin.product.update', $product->id)}}" id="dynamic-form" method="post">
+<form action="{{route('admin.license.update', $license->id)}}" id="dynamic-form" method="post">
     @csrf
 
-    <p>
-        از این نام برای ترجمه عنوان استفاده خواهد شد، لذا نام انگلیسی محصول را بدون فاصله وارد نمایید. برای جدا سازی
-        کلمات میتوانید از آندرلاین استفاده نمایید.
-    </p>
+    <div class="form-group mb-3">
+        <label for="product_id">محصول</label>
+        <select name="product_id" class="form-select mt-1" id="product_id" required>
+            @foreach($products as $product)
+                <option value="{{$product->id}}" {{$license->product->id == $product->id ? 'selected' : ''}}>
+                    {{$product->name}}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
-    <p>
-        اگر محصول جدیدی وارد کردید، برای نمایش فارسی آن در پنل ادمین، آن را به فایل های ترجمه پروژه هم اضافه کنید
-    </p>
+    <div class="form-group mb-3">
+        <label for="user_id">ادمین / نماینده</label>
+        <select name="user_id" id="user_id" class="form-select mt-1" required>
+            @foreach($users as $user)
+                <option value="{{$user->id}}" {{$license->user->id == $user->id ? 'selected' : ''}}>
+                    {{$user->name}}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
-    <div class="form-group">
-        <label for="name">نام محصول</label>
-        <input type="text" name="name" id="name" placeholder="نام محصول به انگلیسی" class="form-control ltr mt-2"
-               value="{{$product->name}}">
+    <div class="form-group mb-3">
+        <label for="max_use">حداکثر استفاده</label>
+        <input type="number" name="max_use" id="max_use" class="form-control mt-1"
+               placeholder="این لایسنس چند بار قابلیت نصب دارد؟" min="1" max="2000" required
+               value="{{$license->max_use}}">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="status">وضعیت</label>
+        <select name="status" id="status" class="form-select mt-1">
+            <option value="1" {{$license->status ? 'selected' : ''}}>فعال</option>
+            <option value="0">غیر فعال</option>
+        </select>
     </div>
 </form>

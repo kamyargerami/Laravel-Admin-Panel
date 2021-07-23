@@ -15,9 +15,8 @@
     <div class="form-group mb-3">
         <label for="user_id">ادمین / نماینده</label>
         <select name="user_id" id="user_id" class="form-select mt-1" required>
-            <option value="">خالی - بعدا متصل میکنم</option>
             @foreach($users as $user)
-                <option value="{{$user->id}}" {{$user->id == 1 ? 'selected' : ''}}>
+                <option value="{{$user->id}}">
                     {{$user->name}}
                 </option>
             @endforeach
@@ -40,5 +39,13 @@
         <label for="max_use">حداکثر استفاده</label>
         <input type="number" name="max_use" id="max_use" class="form-control mt-1"
                placeholder="این لایسنس چند بار قابلیت نصب دارد؟" min="1" max="2000" required>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="status">وضعیت</label>
+        <select name="status" id="status" class="form-select mt-1">
+            <option value="1">فعال</option>
+            <option value="0">غیر فعال</option>
+        </select>
     </div>
 </form>

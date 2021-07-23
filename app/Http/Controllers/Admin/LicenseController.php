@@ -50,6 +50,7 @@ class LicenseController extends Controller
                 'type' => 'yearly',
                 'max_use' => $request->max_use,
                 'user_id' => $request->user_id,
+                'status' => $request->status
             ]);
 
             LogService::log('new_license', $license, auth()->id());
@@ -58,9 +59,12 @@ class LicenseController extends Controller
         return back()->with('success', 'لایسنس های جدید با موفقیت اضافه شد');
     }
 
-    public function edit(Product $product)
+    public function edit(License $license)
     {
-        return view('pages.admin.product.edit', compact('product'));
+        $products = Product::all();
+        $users = User::all();
+
+        return view('pages.admin.license.edit', compact('license', 'products', 'users'));
     }
 
     public function update(Product $product, UpdateProductRequest $request)
