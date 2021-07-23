@@ -3,7 +3,7 @@
 
     <div class="form-group mb-3">
         <label for="product_id">محصول</label>
-        <select name="product_id" class="form-select mt-1" required>
+        <select name="product_id" class="form-select mt-1" id="product_id" required>
             @foreach($products as $product)
                 <option value="{{$product->id}}">
                     {{__('products.' . $product->name)}}

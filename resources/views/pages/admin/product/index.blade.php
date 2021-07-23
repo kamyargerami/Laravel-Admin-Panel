@@ -66,10 +66,8 @@
                 </table>
             </div>
         </div>
-        @if($products->lastPage() > 1 and $products->lastPage() <= $products->currentPage())
-            <div class="card-footer">
-                @include('partials.paginate', ['pages' => $products])
-            </div>
-        @endif
+        <div class="card-footer">
+            @include('partials.paginate', ['pages' => $products])
+        </div>
     </div>
 @endsection

@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Models\License;
 use App\Models\Product;
 use App\Models\User;
+use App\Services\Helper;
 use App\Services\LogService;
 use Illuminate\Http\Request;
 
@@ -15,11 +16,20 @@ class LicenseController extends Controller
 {
     public function index(Request $request)
     {
+        $order_by = Helper::orderBy($request->order_by);
+
         $licenses = License::with('user', 'product')->where(function ($query) use ($request) {
+            foreach (['id', 'user_id', 'product_id', 'key'] as $column) {
+                if ($request->get($column)) {
+                    $query->where($column, $request->get($column));
+                }
+            }
+        })->withCount('used')->orderBy($order_by[0], $order_by[1])->paginate();
 
-        })->withCount('used')->paginate();
+        $products = Product::all();
+        $users = User::all();
 
-        return view('pages.admin.license.index', compact('licenses'));
+        return view('pages.admin.license.index', compact('licenses', 'products', 'users'));
     }
 
     public function add()
@@ -33,12 +43,13 @@ class LicenseController extends Controller
     public function store(AddLicenceRequest $request)
     {
         for ($i = 0; $i < $request->quantity; $i++) {
-            $license = License::create([
+            $license = License::firstOrCreate([
+                'product_id' => $request->product_id,
+                'key' => $this->randomString($request->character_length)
+            ], [
                 'type' => 'yearly',
                 'max_use' => $request->max_use,
                 'user_id' => $request->user_id,
-                'product_id' => $request->product_id,
-                'key' => str_random($request->character_length),
             ]);
 
             LogService::log('new_license', $license, auth()->id());
@@ -61,5 +72,18 @@ class LicenseController extends Controller
         LogService::log('product_updated', $product, auth()->id(), ['new_name' => $request->name]);
 
         return back()->with('success', 'محصول با موفقیت ویرایش شد');
+    }
+
+    function randomString($length = 25)
+    {
+        $characters = '23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return $randomString;
     }
 }

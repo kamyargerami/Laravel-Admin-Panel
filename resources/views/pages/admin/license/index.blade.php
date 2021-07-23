@@ -5,24 +5,56 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <div class="row">
-                <div class="col-9">
-                    <p class="pt-2 mb-0">
-                        لایسنس ها
-                    </p>
+            <form>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <select name="product_id" class="form-select">
+                            <option value="">-- محصول --</option>
+                            @foreach($products as $product)
+                                <option
+                                    value="{{$product->id}}" {{request('product_id') == $product->id ? 'selected' : ''}}>
+                                    {{__('products.' . $product->name)}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <select name="user_id" class="form-select">
+                            <option value="">-- ادمین / نماینده --</option>
+                            @foreach($users as $user)
+                                <option {{request('user_id') == $user->id ? 'selected' : ''}}>
+                                    {{$user->name}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <input name="key" type="text" class="form-control" placeholder="کلید لایسنس"
+                               value="{{request('key')}}">
+                    </div>
+                    <div class="col-lg-2">
+                        @include('partials.order-by',['order_by' => ['created_at', 'updated_at', 'max_use', 'type']])
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="btn btn-primary w-100">
+                            جستجو
+                        </button>
+                    </div>
+                    <div class="col-lg-1">
+                        <a href="{{route('admin.license.list')}}" class="btn btn-warning w-100">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="col-lg-1">
+                        <button class="btn btn-success pull-left w-100" data-bs-toggle="modal"
+                                data-bs-target="#defaultModal"
+                                data-path="{{ route('admin.license.add') }}"
+                                data-title="افزودن لایسنس" data-confirm-text="افزودن">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="col-3">
-                    <button class="btn btn-sm btn-success pull-left" data-bs-toggle="modal"
-                            data-bs-target="#defaultModal"
-                            data-path="{{ route('admin.license.add') }}"
-                            data-title="افزودن لایسنس" data-confirm-text="افزودن">
-                        <i class="fa fa-plus ps-0 ps-lg-1"></i>
-                        <span class="d-none d-lg-inline-block">
-                            افزودن لایسنس
-                        </span>
-                    </button>
-                </div>
-            </div>
+            </form>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -77,10 +109,9 @@
                     @endforeach
                 </table>
             </div>
-            @if($licenses->lastPage() > 1 and $licenses->lastPage() <= $licenses->currentPage())
-                <div class="card-footer">
-                    @include('partials.paginate', ['pages' => $licenses])
-                </div>
-            @endif
         </div>
+        <div class="card-footer">
+            @include('partials.paginate', ['pages' => $licenses])
+        </div>
+    </div>
 @endsection

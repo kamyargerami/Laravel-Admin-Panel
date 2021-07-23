@@ -89,10 +89,8 @@
                 </table>
             </div>
         </div>
-        @if($users->lastPage() > 1 and $users->lastPage() <= $users->currentPage())
-            <div class="card-header">
-                @include('partials.paginate', ['pages' => $users])
-            </div>
-        @endif
+        <div class="card-footer">
+            @include('partials.paginate', ['pages' => $users])
+        </div>
     </div>
 @endsection

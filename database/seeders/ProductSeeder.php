@@ -14,7 +14,7 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        foreach (['kaspersky', 'eset', 'bitdefender', 'padra_mobile', 'idm'] as $name) {
+        foreach (['pav', 'pms', 'pmsp'] as $name) {
             Product::firstOrCreate(['name' => $name]);
         }
     }
