@@ -143,3 +143,11 @@
         </div>
     </div>
 @endsection
+
+@section('script')
+    <script>
+        $('#export_btn').click(function () {
+            window.location = '/admin/license/export?' + $('form').serialize();
+        });
+    </script>
+@endsection

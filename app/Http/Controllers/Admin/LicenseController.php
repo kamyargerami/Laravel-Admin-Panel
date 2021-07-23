@@ -10,22 +10,28 @@ use App\Models\Product;
 use App\Models\User;
 use App\Services\Helper;
 use App\Services\LogService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class LicenseController extends Controller
 {
-    public function index(Request $request)
+    public function getResult(Request $request)
     {
         $order_by = Helper::orderBy($request->order_by);
 
-        $licenses = License::with('user', 'product')->where(function ($query) use ($request) {
+        return License::with('user', 'product')->where(function ($query) use ($request) {
             foreach (['id', 'user_id', 'product_id', 'key'] as $column) {
                 if ($request->get($column)) {
                     $query->where($column, $request->get($column));
                 }
             }
-        })->withCount('used')->orderBy($order_by[0], $order_by[1])->paginate();
+        })->withCount('used')->orderBy($order_by[0], $order_by[1]);
+    }
 
+    public function index(Request $request)
+    {
+        $licenses = $this->getResult($request)->paginate();
         $products = Product::all();
         $users = User::all();
 
@@ -95,5 +101,22 @@ class LicenseController extends Controller
         }
 
         return $randomString;
+    }
+
+    public function export(Request $request)
+    {
+        $result = 'key,type,status,max_use,product,user,expires_at,created_at' . PHP_EOL;
+
+        $this->getResult($request)->chunk(200, function ($licenses) use (&$result) {
+            foreach ($licenses as $license) {
+                $result .= $license->key . ',' . $license->type . ',' . $license->status . ',' . $license->max_use . ',' . $license->product->name . ',' . $license->user->name . ',' . $license->expires_at . ',' . $license->created_at . PHP_EOL;
+            }
+        });
+
+        return Response::make($result, 200, [
+            'Content-type' => 'text/csv',
+            'Cache-Control' => 'no-store, no-cache',
+            'Content-Disposition' => 'attachment; filename="export_' . Carbon::now()->timestamp . '.csv"',
+        ]);
     }
 }
