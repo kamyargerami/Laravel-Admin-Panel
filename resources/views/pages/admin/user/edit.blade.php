@@ -4,13 +4,13 @@
     <div class="row">
         <div class="col-md-6">
             <label>نام و نام خانوادگی</label>
-            <input type="text" name="name" value="{{$user->name}}" required
+            <input type="text" name="name" value="{{$user->name}}" required autocomplete="off"
                    class="form-control" placeholder="نام و نام خانوادگی را به صورت کامل وارد کنید">
         </div>
         <div class="col-md-6">
             <label>رمز عبور</label>
             <input type="password" name="password"
-                   class="form-control ltr"
+                   class="form-control ltr" autocomplete="off"
                    placeholder="در صورت تمایل به تغییر مقدار رمز جدید وارد کنید">
         </div>
     </div>
@@ -21,7 +21,7 @@
         <div class="col-md-6">
             <label>ایمیل</label>
             <input type="email" name="email" value="{{$user->email}}"
-                   class="form-control ltr" required
+                   class="form-control ltr" required autocomplete="off"
                    placeholder="ایمیل معتبر - از این ایمیل برای اطلاع رسانی استفاده خواهد شد">
         </div>
     </div>

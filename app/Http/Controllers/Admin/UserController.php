@@ -49,7 +49,7 @@ class UserController extends Controller
             'email_verified_at' => Carbon::now()->toDateTimeString()
         ]);
 
-        LogService::log('user_added', $user, auth()->id());
+        LogService::log('new_user', $user, auth()->id());
 
         return back()->with('success', 'کاربر جدید با موفقیت اضافه شد');
     }
@@ -76,7 +76,7 @@ class UserController extends Controller
 
         if ($data) {
             $user->update($data);
-            LogService::log('update_profile', $user, auth()->id(), $data);
+            LogService::log('user_updated', $user, auth()->id(), $data);
         }
 
         $user->syncRoles($request->roles);
