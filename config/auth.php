@@ -114,4 +114,8 @@ return [
 
     'password_timeout' => 10800,
 
+
+    // Plain text api key for authenticate api routes
+
+    'api_key' => env('API_KEY')
 ];
