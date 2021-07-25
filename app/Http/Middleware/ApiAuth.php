@@ -16,9 +16,8 @@ class ApiAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->get('api_key') != config('auth.api_key')) {
+        if ($request->header('api-key') != config('auth.api_key')) {
             return response([
-                'status' => 'error',
                 'message' => 'Access denied',
             ], 403);
         }

@@ -11,6 +11,6 @@
 |
 */
 
-Route::post('check', 'LicenseController@check');
+//Route::post('check', 'LicenseController@check');
 
-Route::post('activate', 'LicenseController@activate');
+Route::post('activate', 'LicenseController@activate')->middleware('api_auth');
