@@ -43,19 +43,19 @@ class LicenseController extends Controller
         }
 
         if ($license->product->name != $request->product_name) {
-            // wrong product name
+            // Wrong product name
             LogService::log('wrong_product_name', $license, null, $request->validated());
             return response(['message' => 'The given data was invalid.', 'errors' => ['product_name' => 'این لایسنس با این محصول مطابقت ندارد']], 482);
         }
 
         if (!$license->status) {
-            // inactive license
+            // Inactive license
             LogService::log('inactive_license', $license, null, ['fingerprint' => $request->fingerprint]);
             return response(['message' => 'Inactive license', 'errors' => ['key' => 'لایسنس مورد نظر غیر فعال است و امکان استفاده از آن مقدور نیست.']], 483);
         }
 
         if (Carbon::parse($license->expires_at)->setTime(23, 59, 59)->isPast()) {
-            // expired license
+            // Expired license
             LogService::log('expired_license', $license, null, ['fingerprint' => $request->fingerprint]);
             return response(['message' => 'Expired license', 'errors' => ['key' => 'مهلت استفاده از این لاینس به پایان رسیده است']], 484);
         }
@@ -63,13 +63,13 @@ class LicenseController extends Controller
         if ($license->expires_at) {
             $last_used_fingerprints = array_unique($license->used->pluck('fingerprint')->toArray());
             if (!in_array($request->fingerprint, $last_used_fingerprints) and count($last_used_fingerprints) >= $license->max_use) {
-                // over use
+                // Over use
                 LogService::log('over_use_license', $license, null, ['fingerprint' => $request->fingerprint]);
                 return response(['message' => 'Overused license', 'errors' => ['key' => 'حداکثر استفاده از این لاینس به پایان رسیده و استفاده از این لایسنس برای این دستگاه مقدور نیست']], 485);
             }
             LogService::log('reuse_license', $license, null, ['fingerprint' => $request->fingerprint]);
         } else {
-            // first use
+            // First use
             $license->update([
                 'expires_at' => $license->type == 'yearly' ? Carbon::now()->addYear() : Carbon::now()->addMonth()
             ]);
