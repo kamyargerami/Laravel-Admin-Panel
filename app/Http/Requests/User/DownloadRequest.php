@@ -27,7 +27,6 @@ class DownloadRequest extends FormRequest
             'username' => 'required|string|max:100',
             'password' => 'required|string|max:100',
             'file' => 'required|string|max:200',
-            'product' => 'required|string|exists:products,name'
         ];
     }
 }
