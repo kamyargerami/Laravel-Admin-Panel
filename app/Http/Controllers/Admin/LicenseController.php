@@ -8,10 +8,9 @@ use App\Http\Requests\Admin\MultiUpdateRequest;
 use App\Http\Requests\Admin\UpdateLicenceRequest;
 use App\Models\License;
 use App\Models\Product;
-use App\Models\UsedLicence;
 use App\Models\User;
-use App\Services\HashService;
 use App\Services\Helper;
+use App\Services\LicenseService;
 use App\Services\LogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -52,19 +51,7 @@ class LicenseController extends Controller
     public function store(AddLicenceRequest $request)
     {
         for ($i = 0; $i < $request->quantity; $i++) {
-            do {
-                $key = HashService::rand($request->character_length);
-            } while (UsedLicence::where('username', $key)->count());
-
-            $license = License::create([
-                'type' => 'yearly',
-                'max_use' => $request->max_use,
-                'user_id' => $request->user_id,
-                'status' => $request->status,
-                'product_id' => $request->product_id,
-                'key' => $key,
-            ]);
-
+            $license = LicenseService::create('yearly', $request->max_use, $request->user_id, $request->status, $request->product_id, $request->character_length);
             LogService::log('new_license', $license, auth()->id());
         }
 

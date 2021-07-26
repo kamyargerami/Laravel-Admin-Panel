@@ -24,7 +24,7 @@ class ActivateLicenceRequest extends FormRequest
     public function rules()
     {
         return [
-            'key' => 'required|string|max:250|exists:licenses,key',
+            'key' => 'required|string|max:250',
             'first_name' => 'required|string|max:250',
             'last_name' => 'required|string|max:250',
             'country' => 'required|string|max:250',
