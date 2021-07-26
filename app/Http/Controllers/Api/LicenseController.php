@@ -27,9 +27,9 @@ class LicenseController extends Controller
             })->first();
 
             if ($last_used_licence) {
-                // Already used trial
+                // Can not active trial for this product
                 LogService::log('cannot_use_trial_licence', $last_used_licence, null, ['fingerprint' => $request->fingerprint]);
-                return response(['message' => 'Can not use trial license.', 'errors' => ['key' => 'شما قبلا از لایسنس دیگری برای این محصول استفاده کرده اید و مجاز به دریافت لایسنس آزمایشی جدید نیستید.']], 480);
+                return response(['message' => 'Can not use trial license for this product.', 'errors' => ['key' => 'شما قبلا از لایسنس دیگری برای این محصول استفاده کرده اید و مجاز به دریافت لایسنس آزمایشی جدید نیستید.']], 480);
             }
 
             $license = LicenseService::create('trial', 1, 1, 1, $product->id, 40);
@@ -38,49 +38,46 @@ class LicenseController extends Controller
 
             if (!$license) {
                 // License not exist
-                return response(['message' => 'Invalid license', 'errors' => ['key' => 'این لایسنس در سیستم موجود نیست']], 480);
+                return response(['message' => 'Invalid license', 'errors' => ['key' => 'این لایسنس در سیستم موجود نیست']], 481);
             }
         }
 
         if ($license->product->name != $request->product_name) {
             // wrong product name
             LogService::log('wrong_product_name', $license, null, $request->validated());
-            return response(['message' => 'The given data was invalid.', 'errors' => ['product_name' => 'این لایسنس با این محصول مطابقت ندارد']], 480);
+            return response(['message' => 'The given data was invalid.', 'errors' => ['product_name' => 'این لایسنس با این محصول مطابقت ندارد']], 482);
         }
 
         if (!$license->status) {
             // inactive license
             LogService::log('inactive_license', $license, null, ['fingerprint' => $request->fingerprint]);
-            return response(['message' => 'Inactive license', 'errors' => ['key' => 'لایسنس مورد نظر غیر فعال است و امکان استفاده از آن مقدور نیست.']], 481);
+            return response(['message' => 'Inactive license', 'errors' => ['key' => 'لایسنس مورد نظر غیر فعال است و امکان استفاده از آن مقدور نیست.']], 483);
         }
 
         if (Carbon::parse($license->expires_at)->setTime(23, 59, 59)->isPast()) {
             // expired license
             LogService::log('expired_license', $license, null, ['fingerprint' => $request->fingerprint]);
-            return response(['message' => 'Expired license', 'errors' => ['key' => 'مهلت استفاده از این لاینس به پایان رسیده است']], 482);
+            return response(['message' => 'Expired license', 'errors' => ['key' => 'مهلت استفاده از این لاینس به پایان رسیده است']], 484);
         }
 
-        if ($license->used->where('fingerprint', $request->fingerprint)->count()) {
-            // re use license
+        if ($license->expires_at) {
+            $last_used_fingerprints = array_unique($license->used->pluck('fingerprint')->toArray());
+            if (!in_array($request->fingerprint, $last_used_fingerprints) and count($last_used_fingerprints) >= $license->max_use) {
+                // over use
+                LogService::log('over_use_license', $license, null, ['fingerprint' => $request->fingerprint]);
+                return response(['message' => 'Overused license', 'errors' => ['key' => 'حداکثر استفاده از این لاینس به پایان رسیده و استفاده از این لایسنس برای این دستگاه مقدور نیست']], 485);
+            }
             LogService::log('reuse_license', $license, null, ['fingerprint' => $request->fingerprint]);
-            $reuse = true;
-        } elseif (count(array_unique($license->used->pluck('fingerprint')->toArray())) >= $license->max_use) {
-            // over use
-            LogService::log('over_use_license', $license, null, ['fingerprint' => $request->fingerprint]);
-            return response(['message' => 'Overused license', 'errors' => ['key' => 'حداکثر استفاده از این لاینس به پایان رسیده و استفاده از این لایسنس برای این دستگاه مقدور نیست']], 483);
+        } else {
+            // first use
+            $license->update([
+                'expires_at' => $license->type == 'yearly' ? Carbon::now()->addYear() : Carbon::now()->addMonth()
+            ]);
+            LogService::log('first_use', $license, null, ['fingerprint' => $request->fingerprint]);
         }
 
         DB::beginTransaction();
-
         try {
-            if (!isset($reuse) and !$license->expires_at) {
-                // first use
-                $license->update([
-                    'expires_at' => $license->type == 'yearly' ? Carbon::now()->addYear() : Carbon::now()->addMonth()
-                ]);
-                LogService::log('first_use', $license, null, ['fingerprint' => $request->fingerprint]);
-            }
-
             do {
                 $username = HashService::rand(15);
             } while (UsedLicence::where('username', $username)->count());
@@ -106,28 +103,30 @@ class LicenseController extends Controller
         } catch (\Exception $exception) {
             DB::rollBack();
             LogService::log('create_used_license_failed', $license, null, ['message' => $exception->getMessage(), 'code' => $exception->getCode()]);
-            return response(['message' => 'Store licence data failed', 'errors' => ['key' => 'هنگام ذخیره اطلاعات مشتری مشکلی به وجود آمده، لطفا دوباره امتحان کنید.']], 484);
+            return response(['message' => 'Store licence data failed', 'errors' => ['key' => 'هنگام ذخیره اطلاعات مشتری مشکلی به وجود آمده، لطفا دوباره امتحان کنید.']], 486);
         }
 
         return response([
-            'key' => $license->key,
-            'type' => $license->type,
-            'product_name' => $license->product->name,
-            'use_type' => isset($reuse) ? 'reuse' : 'first_use',
-            'first_use_date' => Carbon::parse($license->used()->get()->first()->created_at)->timestamp,
-            'expires_at' => Carbon::parse($license->expires_at)->setTime(23, 59, 59)->timestamp,
-            'first_name' => $used_licence->first_name,
-            'last_name' => $used_licence->last_name,
-            'email' => $used_licence->email,
-            'phone' => $used_licence->phone,
-            'country' => $used_licence->country,
-            'city' => $used_licence->city,
-            'company' => $used_licence->company,
-            'version' => $used_licence->version,
-            'fingerprint' => $used_licence->fingerprint,
-            'device_name' => $used_licence->device_name,
-            'username' => $used_licence->username,
-            'password' => $used_licence->password,
+            'message' => 'You can use this license',
+            'data' => [
+                'key' => $license->key,
+                'type' => $license->type,
+                'product_name' => $license->product->name,
+                'first_use_date' => Carbon::parse($license->used()->get()->first()->created_at)->timestamp,
+                'expires_at' => Carbon::parse($license->expires_at)->setTime(23, 59, 59)->timestamp,
+                'first_name' => $used_licence->first_name,
+                'last_name' => $used_licence->last_name,
+                'email' => $used_licence->email,
+                'phone' => $used_licence->phone,
+                'country' => $used_licence->country,
+                'city' => $used_licence->city,
+                'company' => $used_licence->company,
+                'version' => $used_licence->version,
+                'fingerprint' => $used_licence->fingerprint,
+                'device_name' => $used_licence->device_name,
+                'username' => $used_licence->username,
+                'password' => $used_licence->password,
+            ]
         ]);
     }
 }
