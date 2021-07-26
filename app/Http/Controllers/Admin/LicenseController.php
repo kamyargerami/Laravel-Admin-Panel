@@ -8,7 +8,9 @@ use App\Http\Requests\Admin\MultiUpdateRequest;
 use App\Http\Requests\Admin\UpdateLicenceRequest;
 use App\Models\License;
 use App\Models\Product;
+use App\Models\UsedLicence;
 use App\Models\User;
+use App\Services\HashService;
 use App\Services\Helper;
 use App\Services\LogService;
 use Carbon\Carbon;
@@ -32,7 +34,7 @@ class LicenseController extends Controller
     {
         $order_by = Helper::orderBy($request->order_by);
 
-        $licenses = $this->getResultQuery($request)->withCount('used')->orderBy($order_by[0], $order_by[1])->paginate();
+        $licenses = $this->getResultQuery($request)->with('used')->orderBy($order_by[0], $order_by[1])->paginate();
         $products = Product::all();
         $users = User::all();
 
@@ -50,14 +52,17 @@ class LicenseController extends Controller
     public function store(AddLicenceRequest $request)
     {
         for ($i = 0; $i < $request->quantity; $i++) {
-            $license = License::firstOrCreate([
-                'product_id' => $request->product_id,
-                'key' => $this->randomString($request->character_length)
-            ], [
+            do {
+                $key = HashService::rand($request->character_length);
+            } while (UsedLicence::where('username', $key)->count());
+
+            $license = License::create([
                 'type' => 'yearly',
                 'max_use' => $request->max_use,
                 'user_id' => $request->user_id,
-                'status' => $request->status
+                'status' => $request->status,
+                'product_id' => $request->product_id,
+                'key' => $key,
             ]);
 
             LogService::log('new_license', $license, auth()->id());
@@ -104,19 +109,6 @@ class LicenseController extends Controller
         $license->delete();
 
         return back()->with('success', 'لایسنس با موفقیت حذف شد');
-    }
-
-    function randomString($length = 25)
-    {
-        $characters = '23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-
-        return $randomString;
     }
 
     public function export(Request $request)

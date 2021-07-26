@@ -105,7 +105,7 @@
                                 @endif
                             </td>
                             <td>{{$license->max_use}}</td>
-                            <td>{{$license->used_count}}</td>
+                            <td>{{count(array_unique($license->used->pluck('fingerprint')->toArray()))}}</td>
                             <td>{{$license->product->name}}</td>
                             <td>{{$license->user->name}}</td>
                             <td>{{$license->key}}</td>

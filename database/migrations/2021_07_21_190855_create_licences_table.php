@@ -18,13 +18,12 @@ class CreateLicencesTable extends Migration
             $table->enum('type', \App\Models\License::Types);
             $table->boolean('status')->default(1);
             $table->unsignedSmallInteger('max_use');
-            $table->string('key');
+            $table->string('key')->unique();
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('user_id');
             $table->timestamps();
             $table->date('expires_at')->nullable();
             $table->softDeletes();
-            $table->unique(['key', 'product_id'], 'key_product_unique');
         });
     }
 

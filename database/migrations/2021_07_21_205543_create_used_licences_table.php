@@ -26,6 +26,8 @@ class CreateUsedLicencesTable extends Migration
             $table->string('device_name');
             $table->string('fingerprint');
             $table->string('company')->nullable();
+            $table->string('username')->unique();
+            $table->string('password');
             $table->timestamps();
         });
     }
