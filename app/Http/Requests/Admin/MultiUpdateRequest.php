@@ -24,7 +24,11 @@ class MultiUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'new_user_id' => 'required|numeric|exists:users,id'
+            'new_product_id' => 'nullable|numeric|exists:products,id',
+            'new_user_id' => 'nullable|numeric|exists:users,id',
+            'new_max_use' => 'nullable|numeric|min:1|max:2000',
+            'new_status' => 'nullable|boolean',
+            'new_expires_at' => 'nullable|date'
         ];
     }
 }

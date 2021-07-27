@@ -19,7 +19,7 @@
                                class="form-control">
                     </div>
                     <div class="col-md-2 mb-2 mb-lg-0">
-                        @include('partials.order-by',['order_by' => ['created_at','updated_at','visit','price']])
+                        @include('partials.order-by',['order_by' => ['created_at','updated_at']])
                     </div>
                     <div class="col-md-2 mb-2 mb-lg-0">
                         <button class="btn btn-primary w-100">

@@ -26,6 +26,15 @@ class LicenseController extends Controller
                     $query->where($column, $request->get($column));
                 }
             }
+
+            if ($request->from_created)
+                $query->where('created_at', '>=', $request->from_created);
+            if ($request->to_created)
+                $query->where('created_at', '<=', $request->to_created);
+            if ($request->from_id)
+                $query->where('id', '>=', $request->from_id);
+            if ($request->to_id)
+                $query->where('id', '<=', $request->to_id);
         });
     }
 
@@ -119,13 +128,21 @@ class LicenseController extends Controller
     {
         $this->getResultQuery($request)->chunk(200, function ($licenses) use ($request) {
             foreach ($licenses as $license) {
-                if ($license->user_id != $request->new_user_id) {
-                    $license->update([
-                        'user_id' => $request->new_user_id
-                    ]);
+                $data = [];
 
-                    LogService::log('license_updated', $license, auth()->id(), ['user_id' => $request->new_user_id]);
+                foreach (['product_id', 'user_id', 'max_use', 'status', 'expires_at'] as $column) {
+                    if ($request->get('new_' . $column) != '' and $license->$column != $request->get('new_' . $column)) {
+                        $data[$column] = $request->get('new_' . $column);
+                    }
                 }
+
+                if (!count($data)) {
+                    return back()->withErrors(['شما هیچ فیلدی را تغییر ندادید در نتیجه تغییری اعمال نشد']);
+                }
+
+                $license->update($data);
+
+                LogService::log('license_updated', $license, auth()->id(), $data);
             }
         });
 
