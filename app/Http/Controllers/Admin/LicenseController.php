@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\MultiUpdateRequest;
 use App\Http\Requests\Admin\UpdateLicenceRequest;
 use App\Models\License;
 use App\Models\Product;
+use App\Models\UsedLicence;
 use App\Models\User;
 use App\Services\Helper;
 use App\Services\LicenseService;
@@ -147,5 +148,12 @@ class LicenseController extends Controller
         });
 
         return back()->with('success', 'لایسنس های مورد نظر ویرایش شدند.');
+    }
+
+    public function used($license_id)
+    {
+        $used_licenses = UsedLicence::where(['license_id' => $license_id])->orderByDesc('id')->paginate();
+
+        return view('pages.admin.license.used', compact('used_licenses', 'license_id'));
     }
 }

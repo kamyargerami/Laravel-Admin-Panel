@@ -109,7 +109,16 @@
                                 @endif
                             </td>
                             <td>{{$license->max_use}}</td>
-                            <td>{{count(array_unique($license->used->pluck('fingerprint')->toArray()))}}</td>
+                            <td>
+                                @if($used_count = count(array_unique($license->used->pluck('fingerprint')->toArray())))
+                                    <a href="{{route('admin.license.used', $license->id)}}"
+                                       class="text-dark no-decoration" target="_blank">
+                                        {{$used_count}}
+                                    </a>
+                                @else
+                                    0
+                                @endif
+                            </td>
                             <td>{{$license->product->name}}</td>
                             <td>{{$license->user->name}}</td>
                             <td>{{$license->key}}</td>
@@ -131,13 +140,19 @@
                                         </a>
                                         <a class="dropdown-item" data-bs-toggle="modal"
                                            data-bs-target="#defaultModal"
-                                           data-path="{{ route('admin.log', ['type' => 'License','id' => $license->id]) }}"
+                                           data-path="{{ route('admin.log', ['type' => 'License', 'id' => $license->id]) }}"
                                            data-title=" لاگ های لایسنس {{$license->id}}">
                                             لاگ
                                         </a>
                                         <a class="dropdown-item" href="{{route('admin.license.delete',$license->id)}}">
                                             حذف
                                         </a>
+                                        @if($used_count)
+                                            <a class="dropdown-item" target="_blank"
+                                               href="{{route('admin.license.used', $license->id)}}">
+                                                مشتریان
+                                            </a>
+                                        @endif
                                     </div>
                                 </div>
                             </td>
