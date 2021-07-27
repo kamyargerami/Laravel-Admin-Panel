@@ -9,11 +9,11 @@
                 <div class="row">
                     <div class="col-lg-1 mb-2">
                         <input type="number" class="form-control" placeholder="از آیدی" name="from_id"
-                               value="{{old('from_id', request('from_id'))}}" min="0">
+                               value="{{old('from_id', request('from_id'))}}" min="0" autocomplete="off">
                     </div>
                     <div class="col-lg-1 mb-2">
                         <input type="number" class="form-control" placeholder="تا آیدی" name="to_id"
-                               value="{{old('to_id', request('to_id'))}}" min="0">
+                               value="{{old('to_id', request('to_id'))}}" min="0" autocomplete="off">
                     </div>
                     <div class="col-lg-2 mb-2">
                         <select name="product_id" class="form-select">
@@ -38,22 +38,38 @@
                     </div>
                     <div class="col-lg-2 mb-2">
                         <input name="key" type="text" class="form-control" placeholder="کلید لایسنس"
-                               value="{{old('key', request('key'))}}">
+                               value="{{old('key', request('key'))}}" autocomplete="off">
                     </div>
                     <div class="col-lg-2 mb-2">
-                        <input type="text" placeholder="از تاریخ" name="from_created"
+                        <input type="text" placeholder="از ایجاد" name="from_created" autocomplete="off"
                                class="form-control pdate" value="{{old('from_created', request('from_created'))}}">
                     </div>
                     <div class="col-lg-2 mb-2">
-                        <input type="text" placeholder="تا تاریخ" name="to_created"
+                        <input type="text" placeholder="تا ایجاد" name="to_created" autocomplete="off"
                                class="form-control pdate" value="{{old('to_created', request('to_created'))}}">
                     </div>
                     <div class="col-lg-2 mb-2">
                         @include('partials.order-by',['order_by' => ['created_at', 'updated_at', 'max_use', 'type']])
                     </div>
-                    <div class="col-lg-1 mb-2">
+                    <div class="col-lg-2 mb-2">
+                        <input type="text" placeholder="از انقضا" name="from_expires" autocomplete="off"
+                               class="form-control pdate" value="{{old('from_created', request('from_expires'))}}">
+                    </div>
+                    <div class="col-lg-2 mb-2">
+                        <input type="text" placeholder="تا انقضا" name="to_expires" autocomplete="off"
+                               class="form-control pdate" value="{{old('to_created', request('to_expires'))}}">
+                    </div>
+                    <div class="col-lg-2 mb-2">
                         <input type="number" name="id" placeholder="آیدی" class="form-control"
-                               value="{{old('id', request('id'))}}" min="0">
+                               value="{{old('id', request('id'))}}" min="0" autocomplete="off">
+                    </div>
+                    <div class="col-lg-2 mb-2">
+                        <input type="text" placeholder="از اولین استفاده" name="from_first_use" autocomplete="off"
+                               class="form-control pdate" value="{{old('from_created', request('from_first_use'))}}">
+                    </div>
+                    <div class="col-lg-2 mb-2">
+                        <input type="text" placeholder="تا اولین استفاده" name="to_first_use" autocomplete="off"
+                               class="form-control pdate" value="{{old('to_created', request('to_first_use'))}}">
                     </div>
                     <div class="col-lg-2 mb-2">
                         <button type="submit" class="btn btn-primary w-100">
@@ -90,6 +106,7 @@
                         <th>ادمین/نماینده</th>
                         <th>کلید</th>
                         <th>ایجاد</th>
+                        <th>اولین استفاده</th>
                         <th>انقضا</th>
                         <th>عملیات</th>
                     </tr>
@@ -122,8 +139,9 @@
                             <td>{{$license->product->name}}</td>
                             <td>{{$license->user->name}}</td>
                             <td>{{$license->key}}</td>
-                            <td>{{\Morilog\Jalali\Jalalian::fromDateTime($license->created_at)}}</td>
+                            <td>{{\Morilog\Jalali\Jalalian::fromDateTime($license->created_at)->format('Y-m-d')}}</td>
                             <td>{{$license->expires_at ? \Morilog\Jalali\Jalalian::fromDateTime($license->expires_at)->format('Y-m-d') : '--'}}</td>
+                            <td>{{$license->used->first() ? \Morilog\Jalali\Jalalian::fromDateTime($license->used->first()->created_at)->format('Y-m-d') : '--'}}</td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"

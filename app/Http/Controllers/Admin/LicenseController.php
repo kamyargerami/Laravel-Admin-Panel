@@ -28,14 +28,28 @@ class LicenseController extends Controller
                 }
             }
 
-            if ($request->from_created)
-                $query->where('created_at', '>=', $request->from_created);
-            if ($request->to_created)
-                $query->where('created_at', '<=', $request->to_created);
             if ($request->from_id)
                 $query->where('id', '>=', $request->from_id);
             if ($request->to_id)
                 $query->where('id', '<=', $request->to_id);
+
+            if ($request->from_created)
+                $query->where('created_at', '>=', $request->from_created);
+            if ($request->to_created)
+                $query->where('created_at', '<=', $request->to_created);
+            if ($request->from_expires)
+                $query->where('created_at', '>=', $request->from_expires);
+            if ($request->to_expires)
+                $query->where('created_at', '<=', $request->to_expires);
+
+            if ($request->from_first_use)
+                $query->whereHas('first_use', function ($q) use ($request) {
+                    $q->where('created_at', '>=', $request->from_first_use);
+                });
+            if ($request->to_first_use)
+                $query->whereHas('first_use', function ($q) use ($request) {
+                    $q->where('created_at', '<=', $request->to_first_use);
+                });
         });
     }
 

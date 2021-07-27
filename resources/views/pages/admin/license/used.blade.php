@@ -27,6 +27,7 @@
                         <th>نام دستگاه</th>
                         <th>شماره شناسایی</th>
                         <th>شرکت</th>
+                        <th>تاریخ ایجاد</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -43,6 +44,7 @@
                             <td>{{$used->device_name}}</td>
                             <td>{{$used->fingerprint}}</td>
                             <td>{{$used->company}}</td>
+                            <td>{{\Morilog\Jalali\Jalalian::fromDateTime($used->created_at)}}</td>
                         </tr>
                     @endforeach
                     </tbody>
