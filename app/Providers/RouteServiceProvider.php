@@ -45,7 +45,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->name('api.')
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware(['web', 'auth', 'verified', 'permission'])
+            Route::middleware(['web', 'auth', 'verified', 'mobile_verified', 'permission'])
                 ->namespace($this->namespace . '\\Admin')
                 ->prefix('admin')
                 ->name('admin.')
