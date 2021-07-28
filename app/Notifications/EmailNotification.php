@@ -37,7 +37,7 @@ class EmailNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -53,5 +53,18 @@ class EmailNotification extends Notification implements ShouldQueue
             ->line($this->text)
             ->subject($this->subject)
             ->action($this->button_text, $this->button_link);
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param mixed $notifiable
+     * @return array
+     */
+    public function toArray($notifiable)
+    {
+        return [
+            'text' => $this->text
+        ];
     }
 }

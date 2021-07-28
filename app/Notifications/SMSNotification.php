@@ -31,6 +31,19 @@ class SMSNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return [SMSChannel::class];
+        return [SMSChannel::class, 'database'];
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param mixed $notifiable
+     * @return array
+     */
+    public function toArray($notifiable)
+    {
+        return [
+            'text' => $this->text,
+        ];
     }
 }
