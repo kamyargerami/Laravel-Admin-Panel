@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Services\MobileService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ActivateLicenceRequest extends FormRequest
@@ -30,7 +31,15 @@ class ActivateLicenceRequest extends FormRequest
             'country' => 'required|string|max:250',
             'company' => 'nullable|string|max:250',
             'email' => 'required|email|max:250',
-            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'phone' => ['required', function ($attribute, $value, $fail) {
+                if (!MobileService::validate($value, false)['status']) {
+                    foreach (MobileService::validate($value, false)['errors'] as $error) {
+                        $fail($error);
+                    }
+                }
+
+                return true;
+            }],
             'city' => 'required|string|max:250',
             'version' => 'required|string|max:250',
             'fingerprint' => 'required|string|max:250',

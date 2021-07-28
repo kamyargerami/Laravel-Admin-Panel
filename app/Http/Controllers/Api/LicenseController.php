@@ -12,6 +12,7 @@ use App\Models\UsedLicence;
 use App\Services\HashService;
 use App\Services\LicenseService;
 use App\Services\LogService;
+use App\Services\MobileService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -86,7 +87,7 @@ class LicenseController extends Controller
                 'license_id' => $license->id,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
-                'phone' => $request->phone,
+                'phone' => MobileService::generate($request->phone),
                 'email' => $request->email,
                 'country' => $request->country,
                 'city' => $request->city,
