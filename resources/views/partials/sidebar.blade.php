@@ -6,7 +6,7 @@
     <div class="sidebar-content">
         <div class="sidebar-brand">
             <a href="/">
-                <img src="{{asset('images/logo-light.png')}}" class="img-fluid ms-2" width="35px">
+                <img src="{{asset('images/logo-light.png')}}" class="img-fluid me-2" width="35px">
                 <span class="font-22 text-white">آرسام سافت</span>
             </a>
             <div id="close-sidebar">

@@ -28,7 +28,7 @@
 
                         <label for="remember_me" class="inline-flex items-center mt-3 mb-3">
                             <input id="remember_me" type="checkbox" name="remember">
-                            <span class="me-2">مرا به خاطر بسپار</span>
+                            <span class="ms-2">مرا به خاطر بسپار</span>
                         </label>
 
                         <button class="btn btn-success w-100 mb-2">

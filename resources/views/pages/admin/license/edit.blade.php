@@ -44,7 +44,7 @@
             <div class="form-group mb-3">
                 <label for="pdate">
                     تاریخ انقضا
-                    <i class="text-danger fa fa-warning me-2" data-toggle="tooltip" data-placement="bottom"
+                    <i class="text-danger fa fa-warning ms-2" data-toggle="tooltip" data-placement="bottom"
                        title="در صورتی که لایسنس استفاده شده باشد و شما مقدار آن را خالی قرار دهید این لایسنس بدون محدودیت قابل استفاده میگردد!"></i>
                 </label>
                 <input type="text" placeholder="تاریخ انقضا" name="expires_at" autocomplete="off"

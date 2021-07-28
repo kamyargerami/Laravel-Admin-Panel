@@ -36,7 +36,7 @@
                         </div>
                     </form>
 
-                    <a href="{{route('verify-mobile')}}" class="ms-4">
+                    <a href="{{route('verify-mobile')}}" class="me-4">
                         دریافت دوباره پیامک تایید
                     </a>
 

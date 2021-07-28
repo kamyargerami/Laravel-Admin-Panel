@@ -111,5 +111,17 @@
         <div class="card-footer">
             @include('partials.paginate', ['pages' => $users])
         </div>
+        <div class="card-body">
+            <div class="row justify-content-center">
+                <div class="col-lg-3">
+                    <button class="btn btn-outline-success w-100" data-bs-toggle="modal"
+                            data-bs-target="#notifyModal">
+                        ارسال پیام به کاربران
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    @include('pages.admin.user.notify-from')
 @endsection
