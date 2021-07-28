@@ -7,12 +7,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
+use App\Http\Requests\SendNotificationRequest;
 use App\Models\User;
 use App\Services\Email;
 use App\Services\Helper;
 use App\Services\LogService;
 use App\Services\MobileService;
 use App\Services\SMS;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -155,14 +157,16 @@ class UserController extends Controller
         return back()->with('success', 'دسترسی ها با موفقیت ویرایش شد');
     }
 
-    public function sendNotification(Request $request)
+    public function sendNotification(SendNotificationRequest $request)
     {
-        $this->getResultQuery($request)->chunk(100, function ($users) use ($request) {
+        $on = Carbon::parse($request->date)->setTime($request->hour, $request->minute, 0)->toDate();
+
+        $this->getResultQuery($request)->chunk(100, function ($users) use ($request, $on) {
             if (in_array('sms', $request->methods)) {
-                SMS::send($users, $request->text);
+                SMS::send($users, $request->text, null, $on);
             }
             if (in_array('email', $request->methods)) {
-                Email::send($users, $request->text, $request->subject, $request->button_text, $request->button_link, now()->addMinutes(10));
+                Email::send($users, $request->text, $request->subject, $request->button_text, $request->button_link, $on);
             }
         });
 

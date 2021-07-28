@@ -108,11 +108,8 @@ window.checkSubmitForm = function () {
     }
 }
 
-/////////////////////////////////
-///     currency inout       ////
-/////////////////////////////////
-
-window.formatNumber = function (n) {
-    // format number 1000000 to 1,234,567
-    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-}
+$(".pdate").persianDatepicker({
+    showGregorianDate: true,
+    formatDate: "YYYY-0M-0D",
+    observer: true,
+});

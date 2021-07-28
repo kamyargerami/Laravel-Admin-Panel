@@ -214,11 +214,5 @@
         $('#export_btn').click(function () {
             window.location = '/admin/license/export?' + $('form#search').serialize();
         });
-
-        $(".pdate").persianDatepicker({
-            showGregorianDate: true,
-            formatDate: "YYYY-0M-0D",
-            observer: true,
-        });
     </script>
 @endsection

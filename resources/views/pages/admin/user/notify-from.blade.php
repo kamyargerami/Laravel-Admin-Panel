@@ -13,10 +13,25 @@
                 @endforeach
 
                 <div class="modal-body">
-                    <textarea class="form-control mt-5" rows="5" name="text"
-                              placeholder="متن مورد نظر برای ارسال به کاربران">{{old('text')}}</textarea>
+                    <textarea class="form-control" rows="5" name="text"
+                              placeholder="متن مورد نظر برای ارسال به کاربران" required>{{old('text')}}</textarea>
 
-                    <div class="checkbox mt-5">
+                    <div class="row mt-3">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control pdate" placeholder="تاریخ" name="date"
+                                   value="{{old('date')}}" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" placeholder="دقیقه" name="minute"
+                                   value="{{old('minute')}}" required min="0" max="59">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" placeholder="ساعت" name="hour"
+                                   value="{{old('hour')}}" required min="0" max="24">
+                        </div>
+                    </div>
+
+                    <div class="checkbox mt-4">
                         روش های ارسال:
                         <label class="me-2">
                             <input type="checkbox" value="sms" name="methods[]" class="me-2"
