@@ -117,7 +117,8 @@ class UserController extends Controller
 
     public function addRole(Request $request)
     {
-        Role::create(['name' => $request->name]);
+        $role = Role::create(['name' => $request->name]);
+        LogService::log('role_added', $role, auth()->id());
         return back()->with('success', 'نقش کاربری با موفقیت ایجاد شد');
     }
 
@@ -141,6 +142,8 @@ class UserController extends Controller
         }
 
         $role->syncPermissions($request->permissions);
+
+        LogService::log('update_permissions', $role, auth()->id(), $request->permissions ?: []);
 
         return back()->with('success', 'دسترسی ها با موفقیت ویرایش شد');
     }
