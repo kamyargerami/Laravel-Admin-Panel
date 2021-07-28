@@ -159,10 +159,10 @@ class UserController extends Controller
     {
         $this->getResultQuery($request)->chunk(100, function ($users) use ($request) {
             if (in_array('sms', $request->methods)) {
-                SMS::notify($users, 'تست');
+                SMS::send($users, $request->text);
             }
             if (in_array('email', $request->methods)) {
-                Email::notify($users, $request->subject, $request->text, $request->button_text, $request->button_link, now()->addMinutes(10));
+                Email::send($users, $request->text, $request->subject, $request->button_text, $request->button_link, now()->addMinutes(10));
             }
         });
 

@@ -9,8 +9,13 @@ use Illuminate\Support\Facades\Notification;
 
 class Email
 {
-    public static function notify($users, $subject, $text, $button_text = null, $button_link = null, $delay = null)
+    public static function to($email, $text, $subject, $button_text, $button_link, $delay = null)
     {
-        Notification::send($users, (new EmailNotification($subject, $text, $button_text, $button_link))->delay($delay));
+        Notification::route('mail', $email)->notify((new EmailNotification($text, $subject, $button_text, $button_link))->delay($delay));
+    }
+
+    public static function send($users, $text, $subject, $button_text = null, $button_link = null, $delay = null)
+    {
+        Notification::send($users, (new EmailNotification($text, $subject, $button_text, $button_link))->delay($delay));
     }
 }

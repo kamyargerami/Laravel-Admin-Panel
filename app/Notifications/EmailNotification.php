@@ -11,17 +11,20 @@ class EmailNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $subject, $text, $button_text, $button_link;
+    public $text, $subject, $button_text, $button_link;
+
 
     /**
-     * Create a new notification instance.
-     *
-     * @return void
+     * EmailNotification constructor.
+     * @param $subject
+     * @param $text
+     * @param null $button_text
+     * @param null $button_link
      */
-    public function __construct($subject, $text, $button_text = null, $button_link = null)
+    public function __construct($text, $subject, $button_text = null, $button_link = null)
     {
-        $this->subject = $subject;
         $this->text = $text;
+        $this->subject = $subject;
         $this->button_text = $button_text;
         $this->button_link = $button_link;
     }
@@ -47,21 +50,8 @@ class EmailNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject($this->subject)
             ->line($this->text)
+            ->subject($this->subject)
             ->action($this->button_text, $this->button_link);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param mixed $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
     }
 }

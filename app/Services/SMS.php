@@ -9,13 +9,12 @@ use Illuminate\Support\Facades\Notification;
 
 class SMS
 {
-    public static function send($receiver, $text)
+    public static function to($receiver, $text, $delay = null)
     {
-        dd($receiver, $text);
-        // Todo send sms
+        Notification::route('mobile', $receiver)->notify((new SMSNotification($text))->delay($delay));
     }
 
-    public static function notify($users, $text, $delay = null)
+    public static function send($users, $text, $delay = null)
     {
         Notification::send($users, (new SMSNotification($text))->delay($delay));
     }
