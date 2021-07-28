@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Services\MobileService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUserRequest extends FormRequest
@@ -27,7 +28,16 @@ class UpdateUserRequest extends FormRequest
             'name' => 'required|string|min:3|max:120',
             'email' => 'required|required|email|unique:users,email,' . $this->route()->parameter('user')->id,
             'password' => 'nullable|min:5',
-            'roles' => 'nullable|exists:roles,id'
+            'roles' => 'nullable|exists:roles,id',
+            'mobile' => ['nullable', function ($attribute, $value, $fail) {
+                if (!MobileService::validate($value, true, $this->route()->parameter('user')->id)['status']) {
+                    foreach (MobileService::validate($value, true, $this->route()->parameter('user')->id)['status']['errors'] as $error) {
+                        $fail($error);
+                    }
+                }
+
+                return true;
+            }]
         ];
     }
 }

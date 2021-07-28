@@ -24,6 +24,12 @@
                    class="form-control ltr" required autocomplete="off"
                    placeholder="ایمیل معتبر - از این ایمیل برای اطلاع رسانی استفاده خواهد شد">
         </div>
+        <div class="col-md-6">
+            <label>موبایل</label>
+            <input type="text" name="mobile" value="{{$user->mobile}}"
+                   class="form-control ltr" required autocomplete="off"
+                   placeholder="شماره موبایل معتبر">
+        </div>
     </div>
 
     <div class="mt-2">

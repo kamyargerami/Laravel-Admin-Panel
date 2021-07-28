@@ -10,7 +10,7 @@ use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\User;
 use App\Services\Helper;
 use App\Services\LogService;
-use Carbon\Carbon;
+use App\Services\MobileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -44,9 +44,11 @@ class UserController extends Controller
     {
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
             'password' => Hash::make($request->password),
-            'email_verified_at' => Carbon::now()->toDateTimeString()
+            'email' => $request->email,
+            'email_verified_at' => null,
+            'mobile' => MobileService::generate($request->mobile),
+            'mobile_verified_at' => null
         ]);
 
         LogService::log('new_user', $user, auth()->id());
@@ -69,6 +71,11 @@ class UserController extends Controller
         }
         if ($request->email != $user->email) {
             $data['email'] = $request->email;
+            $data['email_verified_at'] = null;
+        }
+        if ($request->mobile != $user->mobile) {
+            $data['mobile'] = MobileService::generate($request->mobile);
+            $data['mobile_verified_at'] = null;
         }
         if ($request->password) {
             $data['password'] = Hash::make($request->password);
@@ -127,7 +134,7 @@ class UserController extends Controller
     {
         $role = Role::findById($role_id);
 
-        foreach ($request->permissions as $permission) {
+        foreach ($request->permissions ?: [] as $permission) {
             Permission::firstOrCreate([
                 'name' => $permission
             ]);

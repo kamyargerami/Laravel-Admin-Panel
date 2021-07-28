@@ -21,6 +21,12 @@
             <input type="email" name="email" class="form-control ltr" required
                    placeholder="ایمیل معتبر - از این ایمیل برای اطلاع رسانی استفاده خواهد شد">
         </div>
+        <div class="col-md-6">
+            <label>موبایل</label>
+            <input type="text" name="mobile"
+                   class="form-control ltr" required autocomplete="off"
+                   placeholder="شماره موبایل معتبر">
+        </div>
     </div>
 
     <div class="mt-2">

@@ -52,6 +52,8 @@
                         <th>نام</th>
                         <th>ایمیل</th>
                         <th>ایمیل تایید شده</th>
+                        <th>موبایل</th>
+                        <th>موبایل تایید شده</th>
                         <th>عملیات</th>
                     </tr>
 
@@ -62,6 +64,14 @@
                             <td>{{$user->email}}</td>
                             <td>
                                 @if($user->email_verified_at)
+                                    <i class="fa fa-check text-success"></i>
+                                @else
+                                    <i class="fa fa-times text-danger"></i>
+                                @endif
+                            </td>
+                            <td>{{$user->mobile}}</td>
+                            <td>
+                                @if($user->mobile_verified_at)
                                     <i class="fa fa-check text-success"></i>
                                 @else
                                     <i class="fa fa-times text-danger"></i>

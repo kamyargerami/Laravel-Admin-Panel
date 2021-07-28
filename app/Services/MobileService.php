@@ -8,13 +8,19 @@ use Illuminate\Support\Facades\Validator;
 
 class MobileService
 {
-    public static function validate($mobile)
+    public static function validate($mobile, $check_unique = true, $except_user_id = null)
     {
         $mobile = self::generate($mobile);
 
-        $validator = Validator::make(['mobile' => $mobile], [
-            'mobile' => ['required', 'numeric', 'digits_between:10,13', new IranMobile()],
-        ]);
+        if ($check_unique) {
+            $validator = Validator::make(['mobile' => $mobile], [
+                'mobile' => ['required', 'numeric', 'digits_between:10,13', new IranMobile(), 'unique:users,mobile' . ',' . $except_user_id ?: ''],
+            ]);
+        } else {
+            $validator = Validator::make(['mobile' => $mobile], [
+                'mobile' => ['required', 'numeric', 'digits_between:10,13', new IranMobile()],
+            ]);
+        }
 
         if ($validator->fails()) {
             return [
