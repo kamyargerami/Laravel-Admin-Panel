@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class Email extends Notification implements ShouldQueue
+class EmailNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -18,7 +18,7 @@ class Email extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($subject, $text, $button_text, $button_link)
+    public function __construct($subject, $text, $button_text = null, $button_link = null)
     {
         $this->subject = $subject;
         $this->text = $text;

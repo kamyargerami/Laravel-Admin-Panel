@@ -8,10 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\User;
+use App\Services\Email;
 use App\Services\Helper;
 use App\Services\LogService;
-use App\Services\MailService;
 use App\Services\MobileService;
+use App\Services\SMS;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -158,10 +159,10 @@ class UserController extends Controller
     {
         $this->getResultQuery($request)->chunk(100, function ($users) use ($request) {
             if (in_array('sms', $request->methods)) {
-                // todo send mail
+                SMS::notify($users, 'تست');
             }
             if (in_array('email', $request->methods)) {
-                MailService::send($users, $request->subject, $request->text, $request->button_text, $request->button_link, now()->addMinutes(10));
+                Email::notify($users, $request->subject, $request->text, $request->button_text, $request->button_link, now()->addMinutes(10));
             }
         });
 
