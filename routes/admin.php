@@ -16,6 +16,8 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('roles', 'UserController@addRole')->name('user.add-role');
     Route::get('permissions/{role_id}', 'UserController@permissions')->name('user.permissions');
     Route::post('permissions/{role_id}', 'UserController@updatePermissions')->name('user.update-permissions');
+
+    Route::post('notification', 'UserController@sendNotification')->name('user.send-notification');
 });
 
 Route::group(['prefix' => 'log'], function () {

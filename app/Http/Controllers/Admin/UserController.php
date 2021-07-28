@@ -10,6 +10,7 @@ use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\User;
 use App\Services\Helper;
 use App\Services\LogService;
+use App\Services\MailService;
 use App\Services\MobileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,17 +20,22 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    public function getResultQuery($request)
     {
-        $order_by = Helper::orderBy($request->order_by);
-
-        $users = User::where(function ($query) use ($request) {
+        return User::where(function ($query) use ($request) {
             foreach (['id', 'name', 'email'] as $column) {
                 if ($request->get($column)) {
                     $query->where($column, $request->get($column));
                 }
             }
-        })->orderBy($order_by[0], $order_by[1])->paginate();
+        });
+    }
+
+    public function index(Request $request)
+    {
+        $order_by = Helper::orderBy($request->order_by);
+
+        $users = $this->getResultQuery($request)->orderBy($order_by[0], $order_by[1])->paginate();
 
         return view('pages.admin.user.index', compact('users'));
     }
@@ -146,5 +152,19 @@ class UserController extends Controller
         LogService::log('update_permissions', $role, auth()->id(), $request->permissions ?: []);
 
         return back()->with('success', 'دسترسی ها با موفقیت ویرایش شد');
+    }
+
+    public function sendNotification(Request $request)
+    {
+        $this->getResultQuery($request)->chunk(100, function ($users) use ($request) {
+            if (in_array('sms', $request->methods)) {
+                // todo send mail
+            }
+            if (in_array('email', $request->methods)) {
+                MailService::send($users, $request->subject, $request->text, $request->button_text, $request->button_link, now()->addMinutes(10));
+            }
+        });
+
+        return back()->with('success', 'نوتیفیکیشن ها ارسال شد');
     }
 }

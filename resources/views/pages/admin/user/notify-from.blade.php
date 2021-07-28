@@ -5,7 +5,7 @@
                 <h5 class="modal-title">ارسال پیام به کاربران</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{route('admin.license.multi-update')}}" method="post">
+            <form action="{{route('admin.user.send-notification')}}" method="post">
                 @csrf
 
                 @foreach(request()->all() as $key => $value)
@@ -13,8 +13,8 @@
                 @endforeach
 
                 <div class="modal-body">
-                    <textarea class="form-control mt-5" rows="5" name="message"
-                              placeholder="متن مورد نظر برای ارسال به کاربران">{{old('message')}}</textarea>
+                    <textarea class="form-control mt-5" rows="5" name="text"
+                              placeholder="متن مورد نظر برای ارسال به کاربران">{{old('text')}}</textarea>
 
                     <div class="checkbox mt-5">
                         روش های ارسال:
@@ -32,10 +32,10 @@
                     <div class="p-3">
                         <input type="text" name="subject" placeholder="موضوع ایمیل" class="form-control mb-4"
                                value="{{old('subject')}}">
-                        <input type="text" name="btn_title" placeholder="متن دکمه ایمیل" class="form-control mb-4"
-                               value="{{old('btn_title')}}">
-                        <input type="text" name="btn_url" placeholder="لینک دکمه ایمیل" class="form-control mb-4"
-                               value="{{old('btn_url')}}">
+                        <input type="text" name="button_text" placeholder="متن دکمه ایمیل" class="form-control mb-4"
+                               value="{{old('button_text')}}">
+                        <input type="text" name="button_link" placeholder="لینک دکمه ایمیل" class="form-control mb-4"
+                               value="{{old('button_link')}}">
                     </div>
                 </div>
                 <div class="modal-footer">
