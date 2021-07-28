@@ -13,47 +13,33 @@ class SMSChannel
     {
         $receiver = isset($notifiable->routes['mobile']) ? $notifiable->routes['mobile'] : $notifiable->mobile;
 
-        if (!$notification->text or !$receiver) {
-            return false;
-        }
+        if (!$notification->text or !$receiver) return;
 
-        $this->kavenegar($receiver, $notification->text);
+        $this->kavenegar($receiver, $notification->text, $notification->template);
     }
 
-    public function kavenegar($receptor, $message, $template = null)
+    public function kavenegar($receptor, $text, $template = null)
     {
-        if (!$receptor or is_null($receptor) or !$message)
-            return false;
+        $data = [
+            'receptor' => $receptor,
+            'template' => $template,
+            'sender' => config('sms.kavenegar.sender')
+        ];
 
         if ($template) {
-            if (!is_array($message)) {
-                return false;
-            }
+            if (!is_array($text)) return false;
 
-            $smsData = [
-                'receptor' => $receptor,
-                'template' => $template,
-                'sender' => config('services.sms.sender')
-            ];
+            if (isset($text[0])) $data['token'] = $text[0];
+            if (isset($text[1])) $data['token2'] = $text[1];
+            if (isset($text[2])) $data['token3'] = $text[2];
 
-            if (isset($message[0]))
-                $smsData['token'] = $message[0];
-            if (isset($message[1]))
-                $smsData['token2'] = $message[1];
-            if (isset($message[2]))
-                $smsData['token3'] = $message[2];
-
-            return HttpRequestService::send('POST', 'https://api.kavenegar.com/v1/' . config('services.sms.api') . '/verify/lookup.json', [
-                'form_params' => $smsData
+            return HttpRequestService::send('POST', 'https://api.kavenegar.com/v1/' . config('sms.kavenegar.api') . '/verify/lookup.json', [
+                'form_params' => $data
             ]);
         }
 
-        return HttpRequestService::send('POST', 'https://api.kavenegar.com/v1/' . config('services.sms.api') . '/sms/send.json', [
-            'form_params' => [
-                'receptor' => $receptor,
-                'message' => $message,
-                'sender' => config('services.sms.sender')
-            ]
+        return HttpRequestService::send('POST', 'https://api.kavenegar.com/v1/' . config('sms.kavenegar.api') . '/sms/send.json', [
+            'form_params' => $data
         ]);
     }
 }

@@ -11,16 +11,18 @@ class SMSNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $text;
+    public $text, $template;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($text)
+    public function __construct($text, $template)
     {
+        $this->afterCommit = true;
         $this->text = $text;
+        $this->template = $template;
     }
 
     /**
@@ -44,6 +46,7 @@ class SMSNotification extends Notification implements ShouldQueue
     {
         return [
             'text' => $this->text,
+            'template' => $this->template
         ];
     }
 }

@@ -23,6 +23,7 @@ class EmailNotification extends Notification implements ShouldQueue
      */
     public function __construct($text, $subject, $button_text = null, $button_link = null)
     {
+        $this->afterCommit = true;
         $this->text = $text;
         $this->subject = $subject;
         $this->button_text = $button_text;
