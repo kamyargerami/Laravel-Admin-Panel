@@ -14,7 +14,14 @@ class SMSChannel
         if (!isset($notification->receiver) or !$notification->receiver)
             return false;
 
-        $this->kavenegar($notification->receiver, $notification->text, $notification->template);
+        switch (config('sms.provider')) {
+            case 'kavenegar':
+                $this->kavenegar($notification->receiver, $notification->text, $notification->template);
+                break;
+            case 'armaghan':
+                $this->armaghan($notification->receiver, $notification->text);
+                break;
+        }
     }
 
     public function kavenegar($receptor, $text, $template = null)
@@ -42,6 +49,19 @@ class SMSChannel
 
         return HttpRequestService::send('POST', 'https://api.kavenegar.com/v1/' . config('sms.kavenegar.api') . '/sms/send.json', [
             'form_params' => $data
+        ]);
+    }
+
+    public function armaghan($receiver, $text)
+    {
+        return HttpRequestService::send('GET', 'https://negar.armaghan.net/sms/url_send.html', [
+            'query' => [
+                'username' => config('sms.armaghan.username'),
+                'password' => config('sms.armaghan.password'),
+                'originator' => config('sms.armaghan.originator'),
+                'destination' => $receiver,
+                'content' => $text
+            ]
         ]);
     }
 }
