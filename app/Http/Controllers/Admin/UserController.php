@@ -31,6 +31,16 @@ class UserController extends Controller
                     $query->where($column, $request->get($column));
                 }
             }
+
+            if ($request->from_id)
+                $query->where('id', '>=', $request->from_id);
+            if ($request->to_id)
+                $query->where('id', '<=', $request->to_id);
+
+            if ($request->from_created)
+                $query->where('created_at', '>=', $request->from_created);
+            if ($request->to_created)
+                $query->where('created_at', '<=', $request->to_created);
         });
     }
 
