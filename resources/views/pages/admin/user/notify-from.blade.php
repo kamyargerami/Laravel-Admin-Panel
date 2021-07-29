@@ -5,7 +5,7 @@
                 <h5 class="modal-title">ارسال پیام به کاربران</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{route('admin.user.send-notification')}}" method="post">
+            <form action="{{route('admin.notification.send')}}" method="post">
                 @csrf
 
                 @foreach(request()->all() as $key => $value)

@@ -56,6 +56,14 @@
                         </a>
                     </li>
                 @endcan
+                @can('admin.notification.index')
+                    <li>
+                        <a href="{{route('admin.notification.index')}}">
+                            <i class="fa fa-envelope"></i>
+                            <span>نوتیفیکیشن</span>
+                        </a>
+                    </li>
+                @endcan
             </ul>
         </div>
     </div>

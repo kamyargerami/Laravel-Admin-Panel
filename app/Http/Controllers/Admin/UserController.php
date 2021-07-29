@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\SendNotificationRequest;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
-use App\Http\Requests\SendNotificationRequest;
 use App\Models\User;
 use App\Services\Email;
 use App\Services\Helper;

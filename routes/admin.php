@@ -16,8 +16,6 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('roles', 'UserController@addRole')->name('user.add-role');
     Route::get('permissions/{role_id}', 'UserController@permissions')->name('user.permissions');
     Route::post('permissions/{role_id}', 'UserController@updatePermissions')->name('user.update-permissions');
-
-    Route::post('notification', 'UserController@sendNotification')->name('user.send-notification');
 });
 
 Route::group(['prefix' => 'log'], function () {
@@ -47,4 +45,9 @@ Route::group(['prefix' => 'product'], function () {
     Route::get('edit/{product}', 'ProductController@edit')->name('product.edit');
     Route::post('edit/{product}', 'ProductController@update')->name('product.update');
     Route::get('delete/{product}', 'ProductController@delete')->name('product.delete');
+});
+
+Route::group(['prefix' => 'notification'], function () {
+    Route::get('/', 'NotificationController@index')->name('notification.index');
+    Route::post('send', 'UserController@sendNotification')->name('notification.send');
 });

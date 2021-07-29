@@ -22,12 +22,13 @@ class SMSChannel
     {
         $data = [
             'receptor' => $receptor,
-            'template' => $template,
             'sender' => config('sms.kavenegar.sender')
         ];
 
         if ($template) {
             if (!is_array($text)) return false;
+
+            $data['template'] = $template;
 
             if (isset($text[0])) $data['token'] = $text[0];
             if (isset($text[1])) $data['token2'] = $text[1];
@@ -37,6 +38,8 @@ class SMSChannel
                 'form_params' => $data
             ]);
         }
+
+        $data['message'] = $text;
 
         return HttpRequestService::send('POST', 'https://api.kavenegar.com/v1/' . config('sms.kavenegar.api') . '/sms/send.json', [
             'form_params' => $data
