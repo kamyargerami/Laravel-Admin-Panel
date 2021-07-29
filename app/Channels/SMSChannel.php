@@ -11,11 +11,10 @@ class SMSChannel
 {
     public function send($notifiable, Notification $notification)
     {
-        $receiver = isset($notifiable->routes['mobile']) ? $notifiable->routes['mobile'] : $notifiable->mobile;
+        if (!isset($notification->receiver) or !$notification->receiver)
+            return false;
 
-        if (!$notification->text or !$receiver) return;
-
-        $this->kavenegar($receiver, $notification->text, $notification->template);
+        $this->kavenegar($notification->receiver, $notification->text, $notification->template);
     }
 
     public function kavenegar($receptor, $text, $template = null)

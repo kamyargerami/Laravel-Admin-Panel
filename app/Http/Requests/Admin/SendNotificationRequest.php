@@ -31,21 +31,21 @@ class SendNotificationRequest extends FormRequest
             'methods' => 'required|array',
             'methods.*' => 'required|in:sms,email',
             'subject' => [function ($attribute, $value, $fail) {
-                if (in_array('email', $this->methods) and !$value) {
+                if (in_array('email', $this->methods ?: []) and !$value) {
                     $fail('موضوع برای ایمیل الزامی است');
                 }
 
                 return true;
             }],
             'button_text' => [function ($attribute, $value, $fail) {
-                if (in_array('email', $this->methods) and !$value) {
+                if (in_array('email', $this->methods ?: []) and !$value) {
                     $fail('متن دکمه برای ایمیل الزامی است');
                 }
 
                 return true;
             }],
             'button_link' => [function ($attribute, $value, $fail) {
-                if (in_array('email', $this->methods) and !$value) {
+                if (in_array('email', $this->methods ?: []) and !$value) {
                     $fail('لینک دکمه برای ایمیل الزامی است');
                 }
 

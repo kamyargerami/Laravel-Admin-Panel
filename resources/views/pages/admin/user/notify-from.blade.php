@@ -19,15 +19,15 @@
                     <div class="row mt-3">
                         <div class="col-md-8">
                             <input type="text" class="form-control pdate" placeholder="تاریخ" name="date"
-                                   value="{{old('date')}}" required>
+                                   value="{{old('date', now()->toDateString())}}" required>
                         </div>
                         <div class="col-md-2">
                             <input type="number" class="form-control" placeholder="دقیقه" name="minute"
-                                   value="{{old('minute')}}" required min="0" max="59">
+                                   value="{{old('minute', now()->minute)}}" required min="0" max="59">
                         </div>
                         <div class="col-md-2">
                             <input type="number" class="form-control" placeholder="ساعت" name="hour"
-                                   value="{{old('hour')}}" required min="0" max="24">
+                                   value="{{old('hour', now()->hour)}}" required min="0" max="24">
                         </div>
                     </div>
 

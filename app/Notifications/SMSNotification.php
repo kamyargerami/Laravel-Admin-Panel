@@ -11,7 +11,7 @@ class SMSNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $text, $template;
+    public $text, $template, $receiver;
 
     /**
      * Create a new notification instance.
@@ -33,6 +33,11 @@ class SMSNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
+        $this->receiver = $notifiable->routes['mobile'] ?? $notifiable->mobile;
+
+        if (!$this->receiver)
+            return [];
+
         return [SMSChannel::class, 'database'];
     }
 
@@ -44,9 +49,10 @@ class SMSNotification extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        return [
-            'text' => $this->text,
-            'template' => $this->template
-        ];
+        $data['text'] = $this->text;
+
+        if ($this->template) $data['template'] = $this->template;
+
+        return $data;
     }
 }

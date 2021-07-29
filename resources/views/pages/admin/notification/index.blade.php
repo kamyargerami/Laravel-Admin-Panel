@@ -36,7 +36,8 @@
                                 @foreach($notification->data ?: [] as $key => $value)
                                     @if($value)
                                         <span class="bg-light p-1 font-12 radius-5 me-2">
-                                            {{$key . ': ' . $value}}
+                                            {{$key . ': '}}
+                                            {{is_string($value) ? $value : implode(', ', array_values($value))}}
                                         </span>
                                     @endif
                                 @endforeach
