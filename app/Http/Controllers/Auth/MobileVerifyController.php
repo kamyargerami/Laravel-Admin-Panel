@@ -22,13 +22,12 @@ class MobileVerifyController extends Controller
         if (!Cache::has($cache_name)) {
             $verification_code = rand(1111, 9999);
 
-            Cache::remember($cache_name, 2, function () use ($verification_code) {
+            Cache::remember($cache_name, 120, function () use ($verification_code) {
                 return $verification_code;
             });
 
             SMS::notifyNow(auth()->user(), 'کد تایید موبایل شما ' . $verification_code . ' می باشد');
         }
-
 
         return view('pages.auth.mobile-verify');
     }
