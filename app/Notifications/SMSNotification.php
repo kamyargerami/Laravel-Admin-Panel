@@ -33,10 +33,8 @@ class SMSNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        $this->receiver = $notifiable->routes['mobile'] ?? $notifiable->mobile;
-
-        if (!$this->receiver)
-            return [];
+        $receiver = isset($notifiable->routes['mobile']) ? $notifiable->routes['mobile'] : $notifiable->mobile;
+        if (!$receiver) return [];
 
         return [SMSChannel::class, 'database'];
     }

@@ -31,7 +31,7 @@ class MobileVerifyController extends Controller
                 return $verification_code;
             });
 
-            SMS::send(auth()->user(), 'کد تایید موبایل شما ' . $verification_code . ' می باشد');
+            SMS::notifyNow(auth()->user(), 'کد تایید موبایل شما ' . $verification_code . ' می باشد');
         }
 
 

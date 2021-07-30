@@ -9,13 +9,39 @@ use Illuminate\Support\Facades\Notification;
 
 class Email
 {
-    public static function to($email, $text, $subject, $button_text, $button_link, $delay = null)
+    /**
+     * @param $users // user or users collection
+     * this method stores notification in database
+     */
+    public static function notify($users, $text, $subject, $button_text = null, $button_link = null, $delay = null)
+    {
+        Notification::send($users, (new EmailNotification($text, $subject, $button_text, $button_link))->delay($delay));
+    }
+
+    /**
+     * @param $users // user or users collection
+     * this method stores notification in database
+     */
+    public static function notifyNow($users, $text, $subject, $button_text = null, $button_link = null)
+    {
+        Notification::sendNow($users, new EmailNotification($text, $subject, $button_text, $button_link));
+    }
+
+    /**
+     * @param $email // email address
+     * this method not store notification in database
+     */
+    public static function send($email, $text, $subject, $button_text = null, $button_link = null, $delay = null)
     {
         Notification::route('mail', $email)->notify((new EmailNotification($text, $subject, $button_text, $button_link))->delay($delay));
     }
 
-    public static function send($users, $text, $subject, $button_text = null, $button_link = null, $delay = null)
+    /**
+     * @param $email // email address
+     * this method not store notification in database
+     */
+    public static function sendNow($email, $text, $subject, $button_text = null, $button_link = null)
     {
-        Notification::send($users, (new EmailNotification($text, $subject, $button_text, $button_link))->delay($delay));
+        Notification::route('mail', $email)->notifyNow(new EmailNotification($text, $subject, $button_text, $button_link));
     }
 }

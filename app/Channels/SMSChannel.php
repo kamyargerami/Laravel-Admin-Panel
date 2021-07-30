@@ -11,15 +11,15 @@ class SMSChannel
 {
     public function send($notifiable, Notification $notification)
     {
-        if (!isset($notification->receiver) or !$notification->receiver)
-            return false;
+        $receiver = isset($notifiable->routes['mobile']) ? $notifiable->routes['mobile'] : $notifiable->mobile;
+        if (!$receiver) return false;
 
         switch (config('sms.provider')) {
             case 'kavenegar':
-                $this->kavenegar($notification->receiver, $notification->text, $notification->template);
+                $this->kavenegar($receiver, $notification->text, $notification->template);
                 break;
             case 'armaghan':
-                $this->armaghan($notification->receiver, $notification->text);
+                $this->armaghan($receiver, $notification->text);
                 break;
         }
     }

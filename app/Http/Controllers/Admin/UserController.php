@@ -173,10 +173,10 @@ class UserController extends Controller
 
         $this->getResultQuery($request)->chunk(100, function ($users) use ($request, $on) {
             if (in_array('sms', $request->methods ?: [])) {
-                SMS::send($users, $request->text, null, $on);
+                SMS::notify($users, $request->text, null, $on);
             }
             if (in_array('email', $request->methods ?: [])) {
-                Email::send($users, $request->text, $request->subject, $request->button_text, $request->button_link, $on);
+                Email::notify($users, $request->text, $request->subject, $request->button_text, $request->button_link, $on);
             }
         });
 
