@@ -12,22 +12,17 @@ use Illuminate\Support\Facades\Cache;
 
 class MobileVerifyController extends Controller
 {
-    public $cache_name;
-
-    public function __construct()
-    {
-        $this->cache_name = 'mobile_verification_' . auth()->user()->mobile;
-    }
-
     public function form()
     {
         if (auth()->user()->mobile_verified_at)
             return redirect()->route('admin.index');
 
-        if (!Cache::has($this->cache_name)) {
+        $cache_name = 'mobile_verification_' . auth()->user()->mobile;
+
+        if (!Cache::has($cache_name)) {
             $verification_code = rand(1111, 9999);
 
-            Cache::remember($this->cache_name, 2, function () use ($verification_code) {
+            Cache::remember($cache_name, 2, function () use ($verification_code) {
                 return $verification_code;
             });
 
@@ -47,10 +42,12 @@ class MobileVerifyController extends Controller
             'code' => 'required|numeric'
         ]);
 
-        if (!Cache::exists($this->cache_name))
+        $cache_name = 'mobile_verification_' . auth()->user()->mobile;
+
+        if (!Cache::has($cache_name))
             return back()->with('warning', 'کد تایید منقضی شده است، پیامک تایید مجددا برای شما ارسال شد');
 
-        if (Cache::get($this->cache_name) != $request->code)
+        if (Cache::get($cache_name) != $request->code)
             return back()->withErrors(['کد وارد شده صحیح نیست لطفا دوباره امتحان کنید']);
 
         auth()->user()->update([

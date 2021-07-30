@@ -16,9 +16,11 @@ class MobileVerified
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->mobile and !auth()->user()->mobile_verified_at) {
+        if (!auth()->check())
+            return redirect()->route('login');
+
+        if (auth()->user()->mobile and !auth()->user()->mobile_verified_at)
             return redirect()->route('verify-mobile-form');
-        }
 
         return $next($request);
     }

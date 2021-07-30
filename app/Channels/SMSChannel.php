@@ -58,7 +58,7 @@ class SMSChannel
             'query' => [
                 'username' => config('sms.armaghan.username'),
                 'password' => config('sms.armaghan.password'),
-                'originator' => config('sms.armaghan.originator'),
+                'originator' => config('sms.armaghan.sender'),
                 'destination' => $receiver,
                 'content' => $text
             ]
