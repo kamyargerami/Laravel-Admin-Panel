@@ -48,17 +48,9 @@ Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke
     ->middleware(['auth', 'signed', 'throttle:6,1'])
     ->name('verification.verify');
 
-Route::get('/mobile/verify-mobile', [MobileVerifyController::class, 'form'])
-    ->middleware(['auth', 'throttle:2,1'])
-    ->name('verify-mobile-form');
-
-Route::post('/mobile/verify-mobile', [MobileVerifyController::class, 'verify'])
-    ->middleware(['auth', 'throttle:5,1'])
-    ->name('verify-mobile');
-
-Route::get('/verify-email', [EmailVerificationPromptController::class, '__invoke'])
-    ->middleware('auth')
-    ->name('verification.notice');
+Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+    ->middleware(['auth', 'throttle:6,1'])
+    ->name('verification.send');
 
 Route::get('/confirm-password', [ConfirmablePasswordController::class, 'show'])
     ->middleware('auth')
@@ -70,3 +62,11 @@ Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store']
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
+
+Route::get('/mobile/verify-mobile', [MobileVerifyController::class, 'form'])
+    ->middleware(['auth', 'throttle:2,1'])
+    ->name('verify-mobile-form');
+
+Route::post('/mobile/verify-mobile', [MobileVerifyController::class, 'verify'])
+    ->middleware(['auth', 'throttle:5,1'])
+    ->name('verify-mobile');

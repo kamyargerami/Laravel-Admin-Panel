@@ -16,7 +16,7 @@
                         ایمیل تایید برای شما ارسال شد، لطفا پوشه spam هم بررسی کنید
                     </p>
 
-                    <form method="POST" action="{{ route('verification.notice') }}">
+                    <form method="POST" action="{{ route('verification.send') }}">
                         @csrf
 
                         <button class="btn btn-success w-100 mb-2">
