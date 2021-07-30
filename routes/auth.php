@@ -65,9 +65,9 @@ Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
 
 Route::get('/mobile/verify-mobile', [MobileVerifyController::class, 'form'])
-    ->middleware(['auth', 'throttle:6,1'])
+    ->middleware(['auth', 'throttle:3,1'])
     ->name('verify-mobile-form');
 
 Route::post('/mobile/verify-mobile', [MobileVerifyController::class, 'verify'])
-    ->middleware(['auth', 'throttle:6,1'])
+    ->middleware(['auth', 'throttle:3,1'])
     ->name('verify-mobile');
