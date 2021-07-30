@@ -12,6 +12,9 @@ class SMS
     /**
      * @param $users // user or users collection
      * this method stores notification in database
+     * @param $text
+     * @param null $template
+     * @param null $delay
      */
     public static function notify($users, $text, $template = null, $delay = null)
     {
@@ -21,6 +24,8 @@ class SMS
     /**
      * @param $users // user or users collection
      * this method stores notification in database
+     * @param $text
+     * @param null $template
      */
     public static function notifyNow($users, $text, $template = null)
     {
@@ -30,6 +35,9 @@ class SMS
     /**
      * @param $receiver // mobile number
      * this method not store notification in database
+     * @param $text
+     * @param null $template
+     * @param null $delay
      */
     public static function send($receiver, $text, $template = null, $delay = null)
     {
@@ -39,6 +47,8 @@ class SMS
     /**
      * @param $receiver // mobile number
      * this method not store notification in database
+     * @param $text
+     * @param null $template
      */
     public static function sendNow($receiver, $text, $template = null)
     {

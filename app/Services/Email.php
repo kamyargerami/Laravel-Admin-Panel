@@ -12,6 +12,11 @@ class Email
     /**
      * @param $users // user or users collection
      * this method stores notification in database
+     * @param $text
+     * @param $subject
+     * @param null $button_text
+     * @param null $button_link
+     * @param null $delay
      */
     public static function notify($users, $text, $subject, $button_text = null, $button_link = null, $delay = null)
     {
@@ -21,6 +26,10 @@ class Email
     /**
      * @param $users // user or users collection
      * this method stores notification in database
+     * @param $text
+     * @param $subject
+     * @param null $button_text
+     * @param null $button_link
      */
     public static function notifyNow($users, $text, $subject, $button_text = null, $button_link = null)
     {
@@ -30,6 +39,11 @@ class Email
     /**
      * @param $email // email address
      * this method not store notification in database
+     * @param $text
+     * @param $subject
+     * @param null $button_text
+     * @param null $button_link
+     * @param null $delay
      */
     public static function send($email, $text, $subject, $button_text = null, $button_link = null, $delay = null)
     {
@@ -39,6 +53,10 @@ class Email
     /**
      * @param $email // email address
      * this method not store notification in database
+     * @param $text
+     * @param $subject
+     * @param null $button_text
+     * @param null $button_link
      */
     public static function sendNow($email, $text, $subject, $button_text = null, $button_link = null)
     {
