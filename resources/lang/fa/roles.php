@@ -6,4 +6,5 @@ return [
     'developer' => 'برنامه نویس',
     'supervisor' => 'سرپرست',
     'support' => 'پشتیبان',
+    'deputy' => 'معاون'
 ];
