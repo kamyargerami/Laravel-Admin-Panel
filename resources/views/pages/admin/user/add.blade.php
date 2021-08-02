@@ -28,15 +28,4 @@
                    placeholder="شماره موبایل معتبر">
         </div>
     </div>
-
-    <div class="mt-2">
-        <label for="roles">نقش ها</label>
-        <select name="roles[]" id="roles" class="select2 form-control" multiple>
-            @foreach($roles as $role)
-                <option value="{{$role->id}}">
-                    {{__('roles.' . $role->name)}}
-                </option>
-            @endforeach
-        </select>
-    </div>
 </form>

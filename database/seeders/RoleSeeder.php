@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -17,5 +18,7 @@ class RoleSeeder extends Seeder
         foreach (['admin', 'deputy', 'representation', 'supervisor', 'supervisor', 'support', 'developer'] as $name) {
             Role::firstOrCreate(['name' => $name]);
         }
+
+        User::find(1)->syncRoles(['admin']);
     }
 }
