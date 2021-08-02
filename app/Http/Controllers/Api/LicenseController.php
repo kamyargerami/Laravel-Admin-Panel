@@ -72,7 +72,7 @@ class LicenseController extends Controller
         } else {
             // First use
             $license->update([
-                'expires_at' => $license->type == 'yearly' ? Carbon::now()->addYear() : Carbon::now()->addMonth()
+                'expires_at' => LicenseService::getExpireDate($license->type)
             ]);
             LogService::log('first_use', $license, null, ['fingerprint' => $request->fingerprint]);
         }

@@ -72,6 +72,13 @@
                                class="form-control pdate" value="{{old('to_created', request('to_first_use'))}}">
                     </div>
                     <div class="col-lg-2 mb-2">
+                        <select name="used" class="form-select">
+                            <option value="">-- بدون فیلتر استفاده --</option>
+                            <option value="1" {{request('used') === '1' ? 'selected' : ''}}>استفاده شده</option>
+                            <option value="0"{{request('used') === '0' ? 'selected' : ''}}>بدون استفاده</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2 mb-2">
                         <button type="submit" class="btn btn-primary w-100">
                             جستجو
                             <i class="fa fa-search pe-2"></i>

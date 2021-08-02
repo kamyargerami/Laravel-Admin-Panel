@@ -14,6 +14,24 @@
 
                 <div class="modal-body">
                     <div class="form-group mb-3">
+                        <label for="new_type">
+                            نوع
+                            <i class="text-danger fa fa-warning ms-2" data-bs-toggle="tooltip"
+                               data-bs-placement="right"
+                               title="اگر این لایسنس قبلا استفاده شده باشد، در صورت تغییر این فیلد، می بایست مقدار تاریخ انقضا لایسنس را هم تغییر دهید، api با استفاده از این مورد انقضای یک لایسنس را تشخیص میدهد."></i>
+                        </label>
+                        <select name="new_type" class="form-select mt-1" id="new_type" required>
+                            @foreach(\App\Models\License::Types as $type)
+                                <option value="">بدون تغییر</option>
+                                @continue($type == 'trial')
+                                <option value="{{$type}}">
+                                    {{__('types.license.' . $type)}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
                         <label for="new_product_id">محصول</label>
                         <select name="new_product_id" class="form-select mt-1" id="new_product_id">
                             <option value="">بدون تغییر</option>
@@ -56,7 +74,12 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group mb-3">
-                                <label for="new_expires_at">تاریخ انقضا</label>
+                                <label for="new_expires_at">
+                                    تاریخ انقضا
+                                    <i class="text-danger fa fa-warning ms-2" data-bs-toggle="tooltip"
+                                       data-bs-placement="bottom"
+                                       title="در صورتی که لایسنس استفاده شده باشد و شما مقدار آن را خالی قرار دهید این لایسنس بدون محدودیت قابل استفاده میگردد!"></i>
+                                </label>
                                 <input type="text" placeholder="تاریخ انقضا - (خالی - بدون تغییر)" name="new_expires_at"
                                        id="new_expires_at" autocomplete="off"
                                        class="form-control mt-1 pdate">

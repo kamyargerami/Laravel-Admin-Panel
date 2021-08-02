@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\License;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateLicenceRequest extends FormRequest
@@ -28,7 +29,8 @@ class UpdateLicenceRequest extends FormRequest
             'user_id' => 'required|numeric|exists:users,id',
             'max_use' => 'required|numeric|min:1|max:2000',
             'status' => 'required|boolean',
-            'expires_at' => 'nullable|date'
+            'expires_at' => 'nullable|date',
+            'type' => 'required|string|in:' . implode(',', License::Types)
         ];
     }
 }

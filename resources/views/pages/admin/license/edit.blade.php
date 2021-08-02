@@ -2,6 +2,26 @@
     @csrf
 
     <div class="form-group mb-3">
+        <label for="type">
+            نوع
+            <label for="new_type">
+                نوع
+                <i class="text-danger fa fa-warning ms-2" data-bs-toggle="tooltip"
+                   data-bs-placement="right"
+                   title="اگر این لایسنس قبلا استفاده شده باشد، در صورت تغییر این فیلد، می بایست مقدار تاریخ انقضا لایسنس را هم تغییر دهید، api با استفاده از این مورد انقضای یک لایسنس را تشخیص میدهد."></i>
+            </label>
+        </label>
+        <select name="type" class="form-select mt-1" id="type" required>
+            @foreach(\App\Models\License::Types as $type)
+                @continue($type == 'trial')
+                <option value="{{$type}}" {{$license->type == $type ? 'selected' : ''}}>
+                    {{__('types.license.' . $type)}}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
         <label for="product_id">محصول</label>
         <select name="product_id" class="form-select mt-1" id="product_id" required>
             @foreach($products as $product)
@@ -44,7 +64,7 @@
             <div class="form-group mb-3">
                 <label for="pdate">
                     تاریخ انقضا
-                    <i class="text-danger fa fa-warning ms-2" data-toggle="tooltip" data-placement="bottom"
+                    <i class="text-danger fa fa-warning ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom"
                        title="در صورتی که لایسنس استفاده شده باشد و شما مقدار آن را خالی قرار دهید این لایسنس بدون محدودیت قابل استفاده میگردد!"></i>
                 </label>
                 <input type="text" placeholder="تاریخ انقضا" name="expires_at" autocomplete="off"
@@ -60,4 +80,9 @@
         formatDate: "YYYY-0M-0D",
         observer: true,
     });
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
 </script>

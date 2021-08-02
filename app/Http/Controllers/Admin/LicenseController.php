@@ -50,6 +50,14 @@ class LicenseController extends Controller
                 $query->whereHas('first_use', function ($q) use ($request) {
                     $q->where('created_at', '<=', $request->to_first_use);
                 });
+
+            if (isset($request->used)) {
+                if ($request->used) {
+                    $query->whereHas('used');
+                } else {
+                    $query->doesntHave('used');
+                }
+            }
         });
     }
 
@@ -75,7 +83,7 @@ class LicenseController extends Controller
     public function store(AddLicenceRequest $request)
     {
         for ($i = 0; $i < $request->quantity; $i++) {
-            $license = LicenseService::create('yearly', $request->max_use, $request->user_id, $request->status, $request->product_id, $request->character_length);
+            $license = LicenseService::create($request->type, $request->max_use, $request->user_id, $request->status, $request->product_id, $request->character_length);
             LogService::log('new_license', $license, auth()->id());
         }
 
@@ -145,7 +153,7 @@ class LicenseController extends Controller
             foreach ($licenses as $license) {
                 $data = [];
 
-                foreach (['product_id', 'user_id', 'max_use', 'status', 'expires_at'] as $column) {
+                foreach (['product_id', 'type', 'user_id', 'max_use', 'status', 'expires_at'] as $column) {
                     if ($request->get('new_' . $column) != '' and $license->$column != $request->get('new_' . $column)) {
                         $data[$column] = $request->get('new_' . $column);
                     }

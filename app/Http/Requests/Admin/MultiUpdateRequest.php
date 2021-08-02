@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\License;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MultiUpdateRequest extends FormRequest
@@ -28,7 +29,8 @@ class MultiUpdateRequest extends FormRequest
             'new_user_id' => 'nullable|numeric|exists:users,id',
             'new_max_use' => 'nullable|numeric|min:1|max:2000',
             'new_status' => 'nullable|boolean',
-            'new_expires_at' => 'nullable|date'
+            'new_expires_at' => 'nullable|date',
+            'new_type' => 'nullable|string|in:' . implode(',', License::Types)
         ];
     }
 }

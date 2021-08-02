@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\License;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AddLicenceRequest extends FormRequest
@@ -29,7 +30,8 @@ class AddLicenceRequest extends FormRequest
             'quantity' => 'required|numeric|min:1|max:2000',
             'character_length' => 'required|numeric|min:10|max:150',
             'max_use' => 'required|numeric|min:1|max:2000',
-            'status' => 'required|boolean'
+            'status' => 'required|boolean',
+            'type' => 'required|string|in:' . implode(',', License::Types)
         ];
     }
 }

@@ -1,5 +1,16 @@
 <form action="{{route('admin.license.add')}}" id="dynamic-form" method="post">
     @csrf
+    <div class="form-group mb-3">
+        <label for="type">نوع</label>
+        <select name="type" class="form-select mt-1" id="type" required>
+            @foreach(\App\Models\License::Types as $type)
+                @continue($type == 'trial')
+                <option value="{{$type}}" {{$type == '1_year' ? 'selected' : ''}}>
+                    {{__('types.license.' . $type)}}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
     <div class="form-group mb-3">
         <label for="product_id">محصول</label>
