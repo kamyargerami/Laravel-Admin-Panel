@@ -18,16 +18,17 @@ class PermissionSeeder extends Seeder
     {
         $routes = Route::getRoutes();
         $role = Role::find(1);
+        $permissions = [];
 
         foreach ($routes as $route) {
             if (substr($route->getName(), 0, 5) != 'admin')
                 continue;
 
-            Permission::firstOrCreate([
+            $permissions[] = Permission::firstOrCreate([
                 'name' => $route->getName(),
-            ]);
-
-            $role->syncPermissions($route->getName());
+            ])->id;
         }
+
+        $role->syncPermissions($permissions);
     }
 }

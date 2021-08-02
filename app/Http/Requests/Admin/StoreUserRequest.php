@@ -28,7 +28,6 @@ class StoreUserRequest extends FormRequest
             'name' => 'required|string|min:3|max:120',
             'email' => 'required|required|email|unique:users,email',
             'password' => 'required|min:5',
-            'roles' => 'nullable|exists:roles,id',
             'mobile' => ['nullable', function ($attribute, $value, $fail) {
                 if (!MobileService::validate($value)['status']) {
                     foreach (MobileService::validate($value)['errors'] as $error) {

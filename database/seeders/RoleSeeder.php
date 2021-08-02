@@ -19,6 +19,6 @@ class RoleSeeder extends Seeder
             Role::firstOrCreate(['name' => $name]);
         }
 
-        User::find(1)->syncRoles(['admin']);
+        User::find(1)->syncRoles([1]);
     }
 }
