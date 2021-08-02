@@ -25,13 +25,13 @@ class ActivateLicenceRequest extends FormRequest
     public function rules()
     {
         return [
-            'key' => 'required|string|max:250',
+            'license' => 'required|string|max:250',
             'first_name' => 'required|string|max:250',
             'last_name' => 'required|string|max:250',
             'country' => 'required|string|max:250',
-            'company' => 'nullable|string|max:250',
+            'company_name' => 'nullable|string|max:250',
             'email' => 'required|email|max:250',
-            'phone' => ['required', function ($attribute, $value, $fail) {
+            'phone_number' => ['required', function ($attribute, $value, $fail) {
                 if (!MobileService::validate($value, false)['status']) {
                     foreach (MobileService::validate($value, false)['errors'] as $error) {
                         $fail($error);
@@ -42,7 +42,7 @@ class ActivateLicenceRequest extends FormRequest
             }],
             'city' => 'required|string|max:250',
             'version' => 'required|string|max:250',
-            'fingerprint' => 'required|string|max:250',
+            'machine_fingerprint' => 'required|string|max:250',
             'device_name' => 'required|string|max:250',
             'product_name' => 'required|string|max:250|exists:products,name'
         ];

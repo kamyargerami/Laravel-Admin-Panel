@@ -19,24 +19,35 @@ use Illuminate\Support\Facades\DB;
 
 class LicenseController extends Controller
 {
+    //////////////////////////////////////////////////////
+    ///
+    /// to new developers:
+    /// I forced to use different parameters of our database in api
+    /// because our client's application is hardcoded and developer of that
+    /// Doesn't change these keys to something that is in
+    /// our database, so I change my code to that keys !!
+    ///
+    //////////////////////////////////////////////////////
+
+
     public function activate(ActivateLicenceRequest $request)
     {
         $product = Product::where('name', $request->product_name)->first();
 
-        if ($request->key == 'trial') {
-            $last_used_licence = UsedLicence::where('fingerprint', $request->fingerprint)->whereHas('license', function ($query) use ($product) {
+        if ($request->license == 'trial') {
+            $last_used_licence = UsedLicence::where('fingerprint', $request->machine_fingerprint)->whereHas('key', function ($query) use ($product) {
                 $query->where('product_id', $product->id);
             })->first();
 
             if ($last_used_licence) {
                 // Can not active trial for this product
-                LogService::log('cannot_use_trial_licence', $last_used_licence, null, ['fingerprint' => $request->fingerprint]);
+                LogService::log('cannot_use_trial_licence', $last_used_licence, null, ['fingerprint' => $request->machine_fingerprint]);
                 return response(['message' => 'Can not use trial license for this product.', 'errors' => ['key' => 'شما قبلا از لایسنس دیگری برای این محصول استفاده کرده اید و مجاز به دریافت لایسنس آزمایشی جدید نیستید.']], 480);
             }
 
             $license = LicenseService::create('trial', 1, 1, 1, $product->id, 40);
         } else {
-            $license = License::with('used', 'product')->where('key', $request->key)->first();
+            $license = License::with('used', 'product')->where('key', $request->license)->first();
 
             if (!$license) {
                 // License not exist
@@ -52,36 +63,36 @@ class LicenseController extends Controller
 
         if (!$license->status) {
             // Inactive license
-            LogService::log('inactive_license', $license, null, ['fingerprint' => $request->fingerprint]);
+            LogService::log('inactive_license', $license, null, ['fingerprint' => $request->machine_fingerprint]);
             return response(['message' => 'Inactive license', 'errors' => ['key' => 'لایسنس مورد نظر غیر فعال است و امکان استفاده از آن مقدور نیست.']], 483);
         }
 
         if (Carbon::parse($license->expires_at)->setTime(23, 59, 59)->isPast()) {
             // Expired license
-            LogService::log('expired_license', $license, null, ['fingerprint' => $request->fingerprint]);
+            LogService::log('expired_license', $license, null, ['fingerprint' => $request->machine_fingerprint]);
             return response(['message' => 'Expired license', 'errors' => ['key' => 'مهلت استفاده از این لاینس به پایان رسیده است']], 484);
         }
 
         if (now()->diffInDays($license->created_at) > config('settings.license_deadline_for_use')) {
             // Can not use this license after deadline
             LogService::log('can_not_use_license_after_deadline', $license, null, $request->validated());
-            return response(['message' => 'Can not use this license after deadline', 'errors' => ['license' => 'امکان استفاده از این لایسنس تنها تا ' . config('settings.license_deadline_for_use') . ' روز بعد از ایجاد آن وجود دارد.']], 487);
+            return response(['message' => 'Can not use this license after deadline', 'errors' => ['key' => 'امکان استفاده از این لایسنس تنها تا ' . config('settings.license_deadline_for_use') . ' روز بعد از ایجاد آن وجود دارد.']], 487);
         }
 
         if ($license->expires_at) {
             $last_used_fingerprints = array_unique($license->used->pluck('fingerprint')->toArray());
-            if (!in_array($request->fingerprint, $last_used_fingerprints) and count($last_used_fingerprints) >= $license->max_use) {
+            if (!in_array($request->machine_fingerprint, $last_used_fingerprints) and count($last_used_fingerprints) >= $license->max_use) {
                 // Over use
-                LogService::log('over_use_license', $license, null, ['fingerprint' => $request->fingerprint]);
+                LogService::log('over_use_license', $license, null, ['fingerprint' => $request->machine_fingerprint]);
                 return response(['message' => 'Overused license', 'errors' => ['key' => 'حداکثر استفاده از این لاینس به پایان رسیده و استفاده از این لایسنس برای این دستگاه مقدور نیست']], 485);
             }
-            LogService::log('reuse_license', $license, null, ['fingerprint' => $request->fingerprint]);
+            LogService::log('reuse_license', $license, null, ['fingerprint' => $request->machine_fingerprint]);
         } else {
             // First use
             $license->update([
                 'expires_at' => LicenseService::getExpireDate($license->type)
             ]);
-            LogService::log('first_use', $license, null, ['fingerprint' => $request->fingerprint]);
+            LogService::log('first_use', $license, null, ['fingerprint' => $request->machine_fingerprint]);
         }
 
         DB::beginTransaction();
@@ -94,14 +105,14 @@ class LicenseController extends Controller
                 'license_id' => $license->id,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
-                'phone' => MobileService::generate($request->phone),
+                'phone' => MobileService::generate($request->phone_number),
                 'email' => $request->email,
                 'country' => $request->country,
                 'city' => $request->city,
                 'version' => $request->version,
                 'device_name' => $request->device_name,
-                'fingerprint' => $request->fingerprint,
-                'company' => $request->company,
+                'fingerprint' => $request->machine_fingerprint,
+                'company' => $request->company_name,
             ], [
                 'username' => $username,
                 'password' => HashService::rand(15)
@@ -117,20 +128,20 @@ class LicenseController extends Controller
         return response([
             'message' => 'You can use this license',
             'data' => [
-                'key' => $license->key,
-                'type' => $license->type,
+                'license' => $license->key,
+                'license_type' => $license->type,
                 'product_name' => $license->product->name,
-                'first_use_date' => Carbon::parse($license->used()->get()->first()->created_at)->timestamp,
-                'expires_at' => Carbon::parse($license->expires_at)->setTime(23, 59, 59)->timestamp,
+                'active_date' => Carbon::parse($license->used()->get()->first()->created_at)->timestamp,
+                'expire_date' => Carbon::parse($license->expires_at)->setTime(23, 59, 59)->timestamp,
                 'first_name' => $used_licence->first_name,
                 'last_name' => $used_licence->last_name,
                 'email' => $used_licence->email,
-                'phone' => $used_licence->phone,
+                'phone_number' => $used_licence->phone,
                 'country' => $used_licence->country,
                 'city' => $used_licence->city,
-                'company' => $used_licence->company,
+                'company_name' => $used_licence->company,
                 'version' => $used_licence->version,
-                'fingerprint' => $used_licence->fingerprint,
+                'machine_fingerprint' => $used_licence->fingerprint,
                 'device_name' => $used_licence->device_name,
                 'username' => $used_licence->username,
                 'password' => $used_licence->password,
@@ -140,7 +151,7 @@ class LicenseController extends Controller
 
     public function check(CheckLicenceRequest $request)
     {
-        $license = License::with('used', 'product')->where('key', $request->key)->first();
+        $license = License::with('used', 'product')->where('key', $request->license)->first();
 
         if (!$license) {
             // License not exist
@@ -155,27 +166,27 @@ class LicenseController extends Controller
 
         if (!$license->status) {
             // Inactive license
-            LogService::log('inactive_license', $license, null, ['fingerprint' => $request->fingerprint]);
+            LogService::log('inactive_license', $license, null, ['fingerprint' => $request->machine_fingerprint]);
             return response(['message' => 'Inactive license', 'errors' => ['key' => 'لایسنس مورد نظر غیر فعال است و امکان استفاده از آن مقدور نیست.']], 483);
         }
 
         if (Carbon::parse($license->expires_at)->setTime(23, 59, 59)->isPast()) {
             // Expired license
-            LogService::log('expired_license', $license, null, ['fingerprint' => $request->fingerprint]);
+            LogService::log('expired_license', $license, null, ['fingerprint' => $request->machine_fingerprint]);
             return response(['message' => 'Expired license', 'errors' => ['key' => 'مهلت استفاده از این لاینس به پایان رسیده است']], 484);
         }
 
         if (now()->diffInDays($license->created_at) > config('settings.license_deadline_for_use')) {
             // Can not use this license after deadline
             LogService::log('can_not_use_license_after_deadline', $license, null, $request->validated());
-            return response(['message' => 'Can not use this license after deadline', 'errors' => ['license' => 'امکان استفاده از این لایسنس تنها تا ' . config('settings.license_deadline_for_use') . ' روز بعد از ایجاد آن وجود دارد.']], 487);
+            return response(['message' => 'Can not use this license after deadline', 'errors' => ['key' => 'امکان استفاده از این لایسنس تنها تا ' . config('settings.license_deadline_for_use') . ' روز بعد از ایجاد آن وجود دارد.']], 487);
         }
 
         if ($license->expires_at) {
             $last_used_fingerprints = array_unique($license->used->pluck('fingerprint')->toArray());
-            if (!in_array($request->fingerprint, $last_used_fingerprints) and count($last_used_fingerprints) >= $license->max_use) {
+            if (!in_array($request->machine_fingerprint, $last_used_fingerprints) and count($last_used_fingerprints) >= $license->max_use) {
                 // Over use
-                LogService::log('over_use_license', $license, null, ['fingerprint' => $request->fingerprint]);
+                LogService::log('over_use_license', $license, null, ['fingerprint' => $request->machine_fingerprint]);
                 return response(['message' => 'Overused license', 'errors' => ['key' => 'حداکثر استفاده از این لاینس به پایان رسیده و استفاده از این لایسنس برای این دستگاه مقدور نیست']], 485);
             }
         }
@@ -183,9 +194,9 @@ class LicenseController extends Controller
         return response([
             'message' => 'You can use this license',
             'data' => [
-                'key' => $license->key,
-                'type' => $license->type,
-                'fingerprint' => $request->fingerprint
+                'license' => $license->key,
+                'license_type' => $license->type,
+                'machine_fingerprint' => $request->fingerprint
             ]
         ]);
     }

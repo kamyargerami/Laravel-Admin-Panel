@@ -24,8 +24,8 @@ class CheckLicenceRequest extends FormRequest
     public function rules()
     {
         return [
-            'key' => 'required|string|max:250',
-            'fingerprint' => 'required|string|max:250',
+            'license' => 'required|string|max:250',
+            'machine_fingerprint' => 'required|string|max:250',
             'product_name' => 'required|string|max:250|exists:products,name'
         ];
     }
