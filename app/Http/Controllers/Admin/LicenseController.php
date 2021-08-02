@@ -58,6 +58,10 @@ class LicenseController extends Controller
                     $query->doesntHave('used');
                 }
             }
+
+            if (auth()->user()->cannot('read_others_data')) {
+                $query->where('user_id', auth()->id());
+            }
         });
     }
 
@@ -82,6 +86,10 @@ class LicenseController extends Controller
 
     public function store(AddLicenceRequest $request)
     {
+        if (auth()->user()->cannot('store_data_for_others') and $request->user_id != auth()->id()) {
+            return back()->withErrors(['شما دسترسی ایجاد لایسنس برای افراد دیگر را ندارید']);
+        }
+
         for ($i = 0; $i < $request->quantity; $i++) {
             $license = LicenseService::create($request->type, $request->max_use, $request->user_id, $request->status, $request->product_id, $request->character_length);
             LogService::log('new_license', $license, auth()->id());
@@ -100,6 +108,10 @@ class LicenseController extends Controller
 
     public function update(License $license, UpdateLicenceRequest $request)
     {
+        if (auth()->user()->cannot('change_others_data') and $request->user_id != auth()->id()) {
+            return back()->withErrors(['شما دسترسی ویرایش لایسنس برای افراد دیگر را ندارید']);
+        }
+
         $data = [];
         foreach ($request->validated() as $key => $value) {
             if ($license->$key != $value) {
@@ -121,6 +133,10 @@ class LicenseController extends Controller
 
         if ($count_used_licences) {
             return back()->withErrors(['این لایسنس مشتری دارد و شما مجاز به حذف آن نیستید، ابتدا رکورد مشتریان این لایسنس را پاک کنید']);
+        }
+
+        if (auth()->user()->cannot('delete_others_data') and $license->user_id != auth()->id()) {
+            return back()->withErrors(['شما دسترسی حذف لایسنس برای افراد دیگر را ندارید']);
         }
 
         LogService::log('license_deleted', $license, auth()->id());
@@ -149,6 +165,10 @@ class LicenseController extends Controller
 
     public function multiUpdate(MultiUpdateRequest $request)
     {
+        if (auth()->user()->cannot('change_others_data') and $request->user_id != auth()->id()) {
+            return back()->withErrors(['شما دسترسی ویرایش لایسنس برای افراد دیگر را ندارید']);
+        }
+
         $this->getResultQuery($request)->chunk(200, function ($licenses) use ($request) {
             foreach ($licenses as $license) {
                 $data = [];
@@ -174,7 +194,13 @@ class LicenseController extends Controller
 
     public function used($license_id)
     {
-        $used_licenses = UsedLicence::where(['license_id' => $license_id])->orderByDesc('id')->paginate();
+        $license = License::findOrFail($license_id);
+
+        if (auth()->user()->cannot('change_others_data') and $license->user_id != auth()->id()) {
+            return back()->withErrors(['شما دسترسی مشاهده مشتریان این لایسنس را ندارید']);
+        }
+
+        $used_licenses = UsedLicence::where(['license_id' => $license->id])->orderByDesc('id')->paginate();
 
         return view('pages.admin.license.used', compact('used_licenses', 'license_id'));
     }

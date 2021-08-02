@@ -20,9 +20,9 @@
                                data-bs-placement="right"
                                title="اگر این لایسنس قبلا استفاده شده باشد، در صورت تغییر این فیلد، می بایست مقدار تاریخ انقضا لایسنس را هم تغییر دهید، api با استفاده از این مورد انقضای یک لایسنس را تشخیص میدهد."></i>
                         </label>
-                        <select name="new_type" class="form-select mt-1" id="new_type" required>
+                        <select name="new_type" class="form-select mt-1" id="new_type">
+                            <option value="">بدون تغییر</option>
                             @foreach(\App\Models\License::Types as $type)
-                                <option value="">بدون تغییر</option>
                                 @continue($type == 'trial')
                                 <option value="{{$type}}">
                                     {{__('types.license.' . $type)}}

@@ -9,7 +9,7 @@
 
     <form action="{{route('admin.user.update-permissions',$role_id)}}" id="dynamic-form" method="post">
         @csrf
-        @foreach([] as $custom_permission)
+        @foreach(['read_others_data', 'store_data_for_others', 'change_others_data', 'delete_others_data', 'change_role'] as $custom_permission)
             <div class="form-group">
                 <label>
                     <input type="checkbox" name="permissions[]" value="{{$custom_permission}}" class="permission"

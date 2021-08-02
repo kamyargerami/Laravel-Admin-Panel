@@ -48,14 +48,16 @@
                             <i class="fa fa-times"></i>
                         </a>
                     </div>
-                    <div class="col-lg-1 mb-2 mb-lg-0">
-                        <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
-                                data-bs-target="#defaultModal"
-                                data-path="{{ route('admin.user.add') }}"
-                                data-title="افزودن کاربر" data-confirm-text="افزودن">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                    </div>
+                    @can('admin.user.add')
+                        <div class="col-lg-1 mb-2 mb-lg-0">
+                            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
+                                    data-bs-target="#defaultModal"
+                                    data-path="{{ route('admin.user.add') }}"
+                                    data-title="افزودن کاربر" data-confirm-text="افزودن">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    @endcan
                 </div>
             </form>
         </div>
@@ -100,22 +102,28 @@
                                         عملیات
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" data-bs-toggle="modal"
-                                           data-bs-target="#defaultModal"
-                                           data-path="{{ route('admin.user.edit', $user->id) }}"
-                                           data-title="ویرایش کاربر"
-                                           data-confirm-text="ویرایش">
-                                            ویرایش
-                                        </a>
-                                        <a class="dropdown-item" data-bs-toggle="modal"
-                                           data-bs-target="#defaultModal"
-                                           data-path="{{ route('admin.log', ['type' => 'User','id' => $user->id]) }}"
-                                           data-title="لاگ های کاربر {{$user->id}}">
-                                            لاگ
-                                        </a>
-                                        <a class="dropdown-item" href="{{route('admin.user.delete',$user->id)}}">
-                                            حذف
-                                        </a>
+                                        @can('admin.user.edit')
+                                            <a class="dropdown-item" data-bs-toggle="modal"
+                                               data-bs-target="#defaultModal"
+                                               data-path="{{ route('admin.user.edit', $user->id) }}"
+                                               data-title="ویرایش کاربر"
+                                               data-confirm-text="ویرایش">
+                                                ویرایش
+                                            </a>
+                                        @endcan
+                                        @can('admin.log')
+                                            <a class="dropdown-item" data-bs-toggle="modal"
+                                               data-bs-target="#defaultModal"
+                                               data-path="{{ route('admin.log', ['type' => 'User','id' => $user->id]) }}"
+                                               data-title="لاگ های کاربر {{$user->id}}">
+                                                لاگ
+                                            </a>
+                                        @endcan
+                                        @can('admin.user.delete')
+                                            <a class="dropdown-item" href="{{route('admin.user.delete',$user->id)}}">
+                                                حذف
+                                            </a>
+                                        @endif
                                     </div>
                                 </div>
                             </td>
@@ -127,16 +135,18 @@
         <div class="card-footer">
             @include('partials.paginate', ['pages' => $users])
         </div>
-        <div class="card-body">
-            <div class="row justify-content-center">
-                <div class="col-lg-3">
-                    <button class="btn btn-outline-success w-100" data-bs-toggle="modal"
-                            data-bs-target="#notifyModal">
-                        ارسال پیام به کاربران
-                    </button>
+        @can('admin.notification.send')
+            <div class="card-body">
+                <div class="row justify-content-center">
+                    <div class="col-lg-3">
+                        <button class="btn btn-outline-success w-100" data-bs-toggle="modal"
+                                data-bs-target="#notifyModal">
+                            ارسال پیام به کاربران
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endcan
     </div>
 
     @include('pages.admin.user.notify-from')

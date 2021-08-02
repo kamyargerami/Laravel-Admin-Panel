@@ -17,5 +17,6 @@ return [
     'over_use_license' => 'اتمام استفاده از لایسنس',
     'reuse_license' => 'استفاده مجدد از لایسنس',
     'first_use' => 'استفاده اول از لایسنس',
-    'create_used_license_failed' => 'مشکلی در استفاده از لایسنس به وجود آمد'
+    'create_used_license_failed' => 'مشکلی در استفاده از لایسنس به وجود آمد',
+    'update_permissions' => 'ویرایش توانایی های نقش کاربری'
 ];

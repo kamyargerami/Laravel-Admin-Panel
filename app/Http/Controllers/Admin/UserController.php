@@ -41,6 +41,10 @@ class UserController extends Controller
                 $query->where('created_at', '>=', $request->from_created);
             if ($request->to_created)
                 $query->where('created_at', '<=', $request->to_created);
+
+            if (auth()->user()->cannot('read_others_data')) {
+                $query->where('id', auth()->id());
+            }
         });
     }
 
@@ -83,6 +87,10 @@ class UserController extends Controller
 
     public function update(User $user, UpdateUserRequest $request)
     {
+        if (auth()->user()->cannot('change_role') and array_diff($request->roles, auth()->user()->roles()->pluck('name')->toArray())) {
+            return back()->withErrors(['شما دسترسی ویرایش نقش کاربری دیگران را ندارید']);
+        }
+
         $data = [];
 
         if ($request->name != $user->name) {
@@ -105,7 +113,10 @@ class UserController extends Controller
             LogService::log('user_updated', $user, auth()->id(), $data);
         }
 
-        $user->syncRoles($request->roles);
+        if (array_diff($request->roles, auth()->user()->roles()->pluck('name')->toArray())) {
+            LogService::log('update_roles', $user, auth()->id(), $request->roles);
+            $user->syncRoles($request->roles);
+        }
 
         return back()->with('success', 'کاربر با موفقیت ویرایش شد');
     }
@@ -114,6 +125,10 @@ class UserController extends Controller
     {
         if ($user->id == auth()->id())
             return back()->withErrors(['شما نمیتوانید کاربر خودتان را حذف کنید.']);
+
+        if (auth()->user()->cannot('delete_others_data') and $user->id != auth()->id()) {
+            return back()->withErrors(['شما دسترسی حذف کاربران دیگر را ندارید']);
+        }
 
         LogService::log('user_deleted', $user, auth()->id());
 

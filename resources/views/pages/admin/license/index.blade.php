@@ -26,16 +26,18 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-2 mb-2">
-                        <select name="user_id" class="form-select">
-                            <option value="">-- ادمین / نماینده --</option>
-                            @foreach($users as $user)
-                                <option value="{{$user->id}}" {{request('user_id') == $user->id ? 'selected' : ''}}>
-                                    {{$user->name}}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                    @can('read_others_data')
+                        <div class="col-lg-2 mb-2">
+                            <select name="user_id" class="form-select">
+                                <option value="">-- ادمین / نماینده --</option>
+                                @foreach($users as $user)
+                                    <option value="{{$user->id}}" {{request('user_id') == $user->id ? 'selected' : ''}}>
+                                        {{$user->name}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
                     <div class="col-lg-2 mb-2">
                         <input name="key" type="text" class="form-control" placeholder="کلید لایسنس"
                                value="{{old('key', request('key'))}}" autocomplete="off">
@@ -89,14 +91,16 @@
                             <i class="fa fa-times"></i>
                         </a>
                     </div>
-                    <div class="col-lg-1 mb-2">
-                        <button type="button" class="btn btn-success pull-left w-100" data-bs-toggle="modal"
-                                data-bs-target="#defaultModal"
-                                data-path="{{ route('admin.license.add') }}"
-                                data-title="افزودن لایسنس" data-confirm-text="افزودن">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                    </div>
+                    @can('admin.license.add')
+                        <div class="col-lg-1 mb-2">
+                            <button type="button" class="btn btn-success pull-left w-100" data-bs-toggle="modal"
+                                    data-bs-target="#defaultModal"
+                                    data-path="{{ route('admin.license.add') }}"
+                                    data-title="افزودن لایسنس" data-confirm-text="افزودن">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    @endcan
                 </div>
             </form>
         </div>
@@ -156,28 +160,37 @@
                                         عملیات
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" data-bs-toggle="modal"
-                                           data-bs-target="#defaultModal"
-                                           data-path="{{ route('admin.license.edit', $license->id) }}"
-                                           data-title="ویرایش لایسنس"
-                                           data-confirm-text="ویرایش">
-                                            ویرایش
-                                        </a>
-                                        <a class="dropdown-item" data-bs-toggle="modal"
-                                           data-bs-target="#defaultModal"
-                                           data-path="{{ route('admin.log', ['type' => 'License', 'id' => $license->id]) }}"
-                                           data-title=" لاگ های لایسنس {{$license->id}}">
-                                            لاگ
-                                        </a>
-                                        <a class="dropdown-item" href="{{route('admin.license.delete',$license->id)}}">
-                                            حذف
-                                        </a>
-                                        @if($used_count)
-                                            <a class="dropdown-item" target="_blank"
-                                               href="{{route('admin.license.used', $license->id)}}">
-                                                مشتریان
+                                        @can('admin.license.edit')
+                                            <a class="dropdown-item" data-bs-toggle="modal"
+                                               data-bs-target="#defaultModal"
+                                               data-path="{{ route('admin.license.edit', $license->id) }}"
+                                               data-title="ویرایش لایسنس"
+                                               data-confirm-text="ویرایش">
+                                                ویرایش
                                             </a>
-                                        @endif
+                                        @endcan
+                                        @can('admin.log')
+                                            <a class="dropdown-item" data-bs-toggle="modal"
+                                               data-bs-target="#defaultModal"
+                                               data-path="{{ route('admin.log', ['type' => 'License', 'id' => $license->id]) }}"
+                                               data-title=" لاگ های لایسنس {{$license->id}}">
+                                                لاگ
+                                            </a>
+                                        @endcan
+                                        @can('admin.license.delete')
+                                            <a class="dropdown-item"
+                                               href="{{route('admin.license.delete',$license->id)}}">
+                                                حذف
+                                            </a>
+                                        @endcan
+                                        @can('admin.license.used')
+                                            @if($used_count)
+                                                <a class="dropdown-item" target="_blank"
+                                                   href="{{route('admin.license.used', $license->id)}}">
+                                                    مشتریان
+                                                </a>
+                                            @endif
+                                        @endcan
                                     </div>
                                 </div>
                             </td>
@@ -195,25 +208,31 @@
                 <span class="text-danger">لطفا دقت کنید</span>
             </p>
             <div class="row justify-content-center">
-                <div class="col-12 col-lg-3 mb-2">
-                    <button type="button" class="btn btn-outline-primary pull-left w-100" id="export_btn">
-                        خروجی
-                        <i class="fa fa-download pe-2"></i>
-                    </button>
-                </div>
+                @can('admin.license.export')
+                    <div class="col-12 col-lg-3 mb-2">
+                        <button type="button" class="btn btn-outline-primary pull-left w-100" id="export_btn">
+                            خروجی
+                            <i class="fa fa-download pe-2"></i>
+                        </button>
+                    </div>
+                @endcan
 
-                <div class="col-12 col-lg-3 mb-2">
-                    <button type="button" class="btn btn-outline-success pull-left w-100" data-bs-toggle="modal"
-                            data-bs-target="#multiEditModal">
-                        تغییر گروهی
-                        <i class="fa fa-edit pe-2"></i>
-                    </button>
-                </div>
+                @can('admin.license.multi-update')
+                    <div class="col-12 col-lg-3 mb-2">
+                        <button type="button" class="btn btn-outline-success pull-left w-100" data-bs-toggle="modal"
+                                data-bs-target="#multiEditModal">
+                            تغییر گروهی
+                            <i class="fa fa-edit pe-2"></i>
+                        </button>
+                    </div>
+                @endcan
             </div>
         </div>
     </div>
 
-    @include('pages.admin.license.multi-edit')
+    @can('admin.license.multi-update')
+        @include('pages.admin.license.multi-edit')
+    @endcan
 @endsection
 
 @section('script')
