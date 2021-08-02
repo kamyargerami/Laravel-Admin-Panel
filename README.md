@@ -6,7 +6,10 @@
 composer install
 
 npm install
+```
 
+if  you are using cpanel:
+```
 cp .htaccess.example .htaccess
 ```
 
@@ -20,20 +23,14 @@ php artisan db:seed
 
 ## Production Setup
 
-### Cron Job
-you must add Laravel Scheduler to your crontab
-
-```
-* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
-```
-
 ### Queue
-you must add queue to supervisor
+you must add queue to supervisor for notifications
 
 https://laravel.com/docs/8.x/queues#supervisor-configuration
 
 ### Redis
-You need to install that in production and add details in .env file
+You need to install that in production for better experience with cache and add details in .env file.
+if you don't have redis, you can use 'file' for CACHE_DRIVER
 
 ## Development
 
@@ -49,7 +46,7 @@ you must put this env variables in app/config directory
 Don't commit anything in git without merge request.
 
 ### Front End
-we moved to optimized version of our assets. if you need to add a custom css or custom js code you must add it into style or script section in blade page.
+if you need to add a custom css or custom js code you must add it into style or script section in blade page.
 
 if you need to add new style that must run on every page you can add it into _custom.scss file in resources directory.
 
