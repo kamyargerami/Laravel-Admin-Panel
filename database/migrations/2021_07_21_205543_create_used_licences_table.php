@@ -16,16 +16,9 @@ class CreateUsedLicencesTable extends Migration
         Schema::create('used_licences', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('license_id');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('phone');
-            $table->string('email');
-            $table->string('country');
-            $table->string('city');
-            $table->string('version');
-            $table->string('device_name');
             $table->string('fingerprint');
-            $table->string('company')->nullable();
+            $table->string('device_name');
+            $table->string('version');
             $table->string('username')->unique();
             $table->string('password');
             $table->timestamps();

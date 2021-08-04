@@ -21,6 +21,13 @@ class CreateLicencesTable extends Migration
             $table->string('key')->unique();
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('user_id');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->string('country')->nullable();
+            $table->string('city')->nullable();
+            $table->string('company')->nullable();
             $table->timestamps();
             $table->date('expires_at')->nullable();
             $table->softDeletes();

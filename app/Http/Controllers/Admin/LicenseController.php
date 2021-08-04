@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Services\Helper;
 use App\Services\LicenseService;
 use App\Services\LogService;
+use App\Services\MobileService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -22,11 +23,14 @@ class LicenseController extends Controller
     public function getResultQuery(Request $request)
     {
         return License::with('user', 'product')->where(function ($query) use ($request) {
-            foreach (['id', 'user_id', 'product_id', 'key'] as $column) {
+            foreach (['id', 'user_id', 'product_id', 'key', 'email'] as $column) {
                 if ($request->get($column)) {
                     $query->where($column, $request->get($column));
                 }
             }
+
+            if ($request->phone)
+                $query->where('phone', MobileService::generate($request->phone));
 
             if ($request->from_id)
                 $query->where('id', '>=', $request->from_id);
@@ -200,8 +204,8 @@ class LicenseController extends Controller
             return back()->withErrors(['شما دسترسی مشاهده مشتریان این لایسنس را ندارید']);
         }
 
-        $used_licenses = UsedLicence::where(['license_id' => $license->id])->orderByDesc('id')->paginate();
+        $used_licenses = UsedLicence::where(['license_id' => $license->id])->orderByDesc('id')->get();
 
-        return view('pages.admin.license.used', compact('used_licenses', 'license_id'));
+        return view('pages.admin.license.used', compact('used_licenses', 'license'));
     }
 }

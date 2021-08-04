@@ -101,18 +101,21 @@ class LicenseController extends Controller
                 $username = HashService::rand(15);
             } while (UsedLicence::where('username', $username)->count());
 
-            $used_licence = UsedLicence::firstOrCreate([
-                'license_id' => $license->id,
+            $license->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'phone' => MobileService::generate($request->phone_number),
                 'email' => $request->email,
                 'country' => $request->country,
                 'city' => $request->city,
+                'company' => $request->company_name,
+            ]);
+
+            $used_licence = UsedLicence::firstOrCreate([
+                'license_id' => $license->id,
                 'version' => $request->version,
                 'device_name' => $request->device_name,
                 'fingerprint' => $request->machine_fingerprint,
-                'company' => $request->company_name,
             ], [
                 'username' => $username,
                 'password' => HashService::rand(15)
@@ -122,7 +125,7 @@ class LicenseController extends Controller
         } catch (\Exception $exception) {
             DB::rollBack();
             LogService::log('create_used_license_failed', $license, null, ['message' => $exception->getMessage(), 'code' => $exception->getCode()]);
-            return response(['message' => 'Store licence data failed', 'errors' => ['key' => 'هنگام ذخیره اطلاعات مشتری مشکلی به وجود آمده، لطفا دوباره امتحان کنید.']], 486);
+            return response(['message' => 'Store licence data failed', 'errors' => ['key' => 'هنگام ذخیره اطلاعات مشتری مشکلی به وجود آمده، لطفا دوباره امتحان کنید.', $exception->getMessage()]], 486);
         }
 
         return response([
@@ -133,13 +136,13 @@ class LicenseController extends Controller
                 'product_name' => $license->product->name,
                 'active_date' => Carbon::parse($license->used()->get()->first()->created_at)->timestamp,
                 'expire_date' => Carbon::parse($license->expires_at)->setTime(23, 59, 59)->timestamp,
-                'first_name' => $used_licence->first_name,
-                'last_name' => $used_licence->last_name,
-                'email' => $used_licence->email,
-                'phone_number' => $used_licence->phone,
-                'country' => $used_licence->country,
-                'city' => $used_licence->city,
-                'company_name' => $used_licence->company,
+                'first_name' => $license->first_name,
+                'last_name' => $license->last_name,
+                'email' => $license->email,
+                'phone_number' => $license->phone,
+                'country' => $license->country,
+                'city' => $license->city,
+                'company_name' => $license->company,
                 'version' => $used_licence->version,
                 'machine_fingerprint' => $used_licence->fingerprint,
                 'device_name' => $used_licence->device_name,

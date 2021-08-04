@@ -4,107 +4,144 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <form id="search">
-                <div class="row">
-                    <div class="col-lg-1 mb-2">
-                        <input type="number" class="form-control" placeholder="از آیدی" name="from_id"
-                               value="{{old('from_id', request('from_id'))}}" min="0" autocomplete="off">
-                    </div>
-                    <div class="col-lg-1 mb-2">
-                        <input type="number" class="form-control" placeholder="تا آیدی" name="to_id"
-                               value="{{old('to_id', request('to_id'))}}" min="0" autocomplete="off">
-                    </div>
-                    <div class="col-lg-2 mb-2">
-                        <select name="product_id" class="form-select">
-                            <option value="">-- محصول --</option>
-                            @foreach($products as $product)
-                                <option
-                                    value="{{$product->id}}" {{request('product_id') == $product->id ? 'selected' : ''}}>
-                                    {{$product->name}}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    @can('read_others_data')
-                        <div class="col-lg-2 mb-2">
-                            <select name="user_id" class="form-select">
-                                <option value="">-- ادمین / نماینده --</option>
-                                @foreach($users as $user)
-                                    <option value="{{$user->id}}" {{request('user_id') == $user->id ? 'selected' : ''}}>
-                                        {{$user->name}}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    @endif
-                    <div class="col-lg-2 mb-2">
-                        <input name="key" type="text" class="form-control" placeholder="کلید لایسنس"
-                               value="{{old('key', request('key'))}}" autocomplete="off">
-                    </div>
-                    <div class="col-lg-2 mb-2">
-                        <input type="text" placeholder="از ایجاد" name="from_created" autocomplete="off"
-                               class="form-control pdate" value="{{old('from_created', request('from_created'))}}">
-                    </div>
-                    <div class="col-lg-2 mb-2">
-                        <input type="text" placeholder="تا ایجاد" name="to_created" autocomplete="off"
-                               class="form-control pdate" value="{{old('to_created', request('to_created'))}}">
-                    </div>
-                    <div class="col-lg-2 mb-2">
-                        @include('partials.order-by',['order_by' => ['created_at', 'updated_at', 'max_use', 'type']])
-                    </div>
-                    <div class="col-lg-2 mb-2">
-                        <input type="text" placeholder="از انقضا" name="from_expires" autocomplete="off"
-                               class="form-control pdate" value="{{old('from_created', request('from_expires'))}}">
-                    </div>
-                    <div class="col-lg-2 mb-2">
-                        <input type="text" placeholder="تا انقضا" name="to_expires" autocomplete="off"
-                               class="form-control pdate" value="{{old('to_created', request('to_expires'))}}">
-                    </div>
-                    <div class="col-lg-2 mb-2">
-                        <input type="number" name="id" placeholder="آیدی" class="form-control"
-                               value="{{old('id', request('id'))}}" min="0" autocomplete="off">
-                    </div>
-                    <div class="col-lg-2 mb-2">
-                        <input type="text" placeholder="از اولین استفاده" name="from_first_use" autocomplete="off"
-                               class="form-control pdate" value="{{old('from_created', request('from_first_use'))}}">
-                    </div>
-                    <div class="col-lg-2 mb-2">
-                        <input type="text" placeholder="تا اولین استفاده" name="to_first_use" autocomplete="off"
-                               class="form-control pdate" value="{{old('to_created', request('to_first_use'))}}">
-                    </div>
-                    <div class="col-lg-2 mb-2">
-                        <select name="used" class="form-select">
-                            <option value="">-- بدون فیلتر استفاده --</option>
-                            <option value="1" {{request('used') === '1' ? 'selected' : ''}}>استفاده شده</option>
-                            <option value="0"{{request('used') === '0' ? 'selected' : ''}}>بدون استفاده</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-2 mb-2">
-                        <button type="submit" class="btn btn-primary w-100">
-                            جستجو
-                            <i class="fa fa-search pe-2"></i>
-                        </button>
-                    </div>
-                    <div class="col-lg-1 mb-2">
-                        <a href="{{route('admin.license.list')}}" class="btn btn-warning w-100">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
-                    @can('admin.license.add')
-                        <div class="col-lg-1 mb-2">
-                            <button type="button" class="btn btn-success pull-left w-100" data-bs-toggle="modal"
-                                    data-bs-target="#defaultModal"
-                                    data-path="{{ route('admin.license.add') }}"
-                                    data-title="افزودن لایسنس" data-confirm-text="افزودن">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                    @endcan
-                </div>
-            </form>
-        </div>
         <div class="card-body">
+            <div class="accordion mb-3" id="accordionSearch">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true">
+                            جستجو
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse {{count(request()->all()) ? 'show' : ''}}"
+                         data-bs-parent="#accordionSearch">
+                        <div class="accordion-body">
+                            <form id="search">
+                                <div class="row">
+                                    <div class="col-lg-1 mb-2">
+                                        <input type="number" class="form-control" placeholder="از آیدی" name="from_id"
+                                               value="{{old('from_id', request('from_id'))}}" min="0"
+                                               autocomplete="off">
+                                    </div>
+                                    <div class="col-lg-1 mb-2">
+                                        <input type="number" class="form-control" placeholder="تا آیدی" name="to_id"
+                                               value="{{old('to_id', request('to_id'))}}" min="0" autocomplete="off">
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        <select name="product_id" class="form-select">
+                                            <option value="">-- محصول --</option>
+                                            @foreach($products as $product)
+                                                <option
+                                                    value="{{$product->id}}" {{request('product_id') == $product->id ? 'selected' : ''}}>
+                                                    {{$product->name}}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @can('read_others_data')
+                                        <div class="col-lg-2 mb-2">
+                                            <select name="user_id" class="form-select">
+                                                <option value="">-- ادمین / نماینده --</option>
+                                                @foreach($users as $user)
+                                                    <option
+                                                        value="{{$user->id}}" {{request('user_id') == $user->id ? 'selected' : ''}}>
+                                                        {{$user->name}}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endif
+                                    <div class="col-lg-2 mb-2">
+                                        <input name="key" type="text" class="form-control" placeholder="کلید لایسنس"
+                                               value="{{old('key', request('key'))}}" autocomplete="off">
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        <input type="text" placeholder="از ایجاد" name="from_created" autocomplete="off"
+                                               class="form-control pdate"
+                                               value="{{old('from_created', request('from_created'))}}">
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        <input type="text" placeholder="تا ایجاد" name="to_created" autocomplete="off"
+                                               class="form-control pdate"
+                                               value="{{old('to_created', request('to_created'))}}">
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        @include('partials.order-by',['order_by' => ['created_at', 'updated_at', 'max_use', 'type']])
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        <input type="text" placeholder="از انقضا" name="from_expires" autocomplete="off"
+                                               class="form-control pdate"
+                                               value="{{old('from_created', request('from_expires'))}}">
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        <input type="text" placeholder="تا انقضا" name="to_expires" autocomplete="off"
+                                               class="form-control pdate"
+                                               value="{{old('to_created', request('to_expires'))}}">
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        <input type="number" name="id" placeholder="آیدی" class="form-control"
+                                               value="{{old('id', request('id'))}}" min="0" autocomplete="off">
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        <input type="text" placeholder="از اولین استفاده" name="from_first_use"
+                                               autocomplete="off"
+                                               class="form-control pdate"
+                                               value="{{old('from_created', request('from_first_use'))}}">
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        <input type="text" placeholder="تا اولین استفاده" name="to_first_use"
+                                               autocomplete="off"
+                                               class="form-control pdate"
+                                               value="{{old('to_created', request('to_first_use'))}}">
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        <select name="used" class="form-select">
+                                            <option value="">-- بدون فیلتر استفاده --</option>
+                                            <option value="1" {{request('used') === '1' ? 'selected' : ''}}>استفاده
+                                                شده
+                                            </option>
+                                            <option value="0"{{request('used') === '0' ? 'selected' : ''}}>بدون
+                                                استفاده
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        <input type="text" placeholder="تلفن مشتری" name="phone" autocomplete="off"
+                                               class="form-control ltr" value="{{old('phone', request('phone'))}}">
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        <input type="email" placeholder="ایمیل مشتری" name="email" autocomplete="off"
+                                               class="form-control" value="{{old('email', request('email'))}}">
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            جستجو
+                                            <i class="fa fa-search pe-2"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-lg-1 mb-2">
+                                        <a href="{{route('admin.license.list')}}" class="btn btn-warning w-100">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                    @can('admin.license.add')
+                                        <div class="col-lg-1 mb-2">
+                                            <button type="button" class="btn btn-success pull-left w-100"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#defaultModal"
+                                                    data-path="{{ route('admin.license.add') }}"
+                                                    data-title="افزودن لایسنس" data-confirm-text="افزودن">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    @endcan
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <tr>
@@ -139,10 +176,24 @@
                             <td>{{$license->max_use}}</td>
                             <td>
                                 @if($used_count = count(array_unique($license->used->pluck('fingerprint')->toArray())))
-                                    <a href="{{route('admin.license.used', $license->id)}}"
-                                       class="text-dark no-decoration" target="_blank">
+                                    @can('admin.license.used')
+                                        <a class="text-dark no-decoration" data-bs-toggle="modal"
+                                           data-bs-target="#defaultModal"
+                                           data-path="{{route('admin.license.used', $license->id)}}"
+                                           data-title=" مشتری لایسنس {{$license->id}}">
+                                            {{$used_count}}
+
+                                            /
+
+                                            {{$license->fullName}}
+                                        </a>
+                                    @else
                                         {{$used_count}}
-                                    </a>
+
+                                        /
+
+                                        {{$license->fullName}}
+                                    @endcan
                                 @else
                                     0
                                 @endif
@@ -185,9 +236,11 @@
                                         @endcan
                                         @can('admin.license.used')
                                             @if($used_count)
-                                                <a class="dropdown-item" target="_blank"
-                                                   href="{{route('admin.license.used', $license->id)}}">
-                                                    مشتریان
+                                                <a class="dropdown-item" data-bs-toggle="modal"
+                                                   data-bs-target="#defaultModal"
+                                                   data-path="{{route('admin.license.used', $license->id)}}"
+                                                   data-title=" مشتری لایسنس {{$license->id}}">
+                                                    مشتری
                                                 </a>
                                             @endif
                                         @endcan

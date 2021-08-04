@@ -33,4 +33,9 @@ class License extends Model
     {
         return $this->hasOne(UsedLicence::class);
     }
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . $this->last_name;
+    }
 }
