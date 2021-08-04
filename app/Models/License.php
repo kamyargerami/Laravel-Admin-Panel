@@ -10,7 +10,7 @@ class License extends Model
 {
     use HasFactory, SoftDeletes;
 
-    const Types = ['1_month', '2_month', '3_month', '6_month', '1_year', '2_year', 'trial'];
+    const Types = ['1_month', '2_month', '3_month', '6_month', '12_month', '24_month', 'trial'];
 
     protected $guarded = [];
 

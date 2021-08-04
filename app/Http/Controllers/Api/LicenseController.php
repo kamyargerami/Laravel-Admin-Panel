@@ -36,7 +36,7 @@ class LicenseController extends Controller
     {
         $product = Product::where('name', $request->product_name)->first();
 
-        if ($request->license == '‫‪TRIAL‬‬') {
+        if ($request->license == 'TRIAL') {
             $last_used_licence = UsedLicence::where('fingerprint', $request->machine_fingerprint)->whereHas('license', function ($query) use ($product) {
                 $query->where('product_id', $product->id);
             })->first();
@@ -221,12 +221,6 @@ class LicenseController extends Controller
     {
         if ($license_type == 'trial') return 'TRIAL';
 
-        $type_array = explode('_', $license_type);
-
-        if ($type_array[1] == 'year') {
-            return intval($type_array[0]) * 12;
-        }
-
-        return intval($type_array[0]);
+        return 'GENUINE-' . explode('_', $license_type)[0];
     }
 }

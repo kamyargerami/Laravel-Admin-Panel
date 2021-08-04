@@ -5,7 +5,7 @@
         <select name="type" class="form-select mt-1" id="type" required>
             @foreach(\App\Models\License::Types as $type)
                 @continue($type == 'trial')
-                <option value="{{$type}}" {{$type == '1_year' ? 'selected' : ''}}>
+                <option value="{{$type}}" {{$type == '12_month' ? 'selected' : ''}}>
                     {{__('types.license.' . $type)}}
                 </option>
             @endforeach
