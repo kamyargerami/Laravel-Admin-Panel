@@ -213,8 +213,8 @@
                             <td>{{$license->user->name}}</td>
                             <td>{{$license->key}}</td>
                             <td>{{\Morilog\Jalali\Jalalian::fromDateTime($license->created_at)->format('Y-m-d')}}</td>
-                            <td>{{$license->expires_at ? \Morilog\Jalali\Jalalian::fromDateTime($license->expires_at)->format('Y-m-d') : '--'}}</td>
                             <td>{{$license->used->first() ? \Morilog\Jalali\Jalalian::fromDateTime($license->used->first()->created_at)->format('Y-m-d') : '--'}}</td>
+                            <td>{{$license->expires_at ? \Morilog\Jalali\Jalalian::fromDateTime($license->expires_at)->format('Y-m-d') : '--'}}</td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"
