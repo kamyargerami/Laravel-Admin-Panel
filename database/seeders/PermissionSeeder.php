@@ -29,6 +29,12 @@ class PermissionSeeder extends Seeder
             ])->id;
         }
 
+        foreach (['read_others_data', 'store_data_for_others', 'change_others_data', 'delete_others_data', 'change_role'] as $custom_permission) {
+            $permissions[] = Permission::firstOrCreate([
+                'name' => $custom_permission,
+            ])->id;
+        }
+
         $role->syncPermissions($permissions);
     }
 }
