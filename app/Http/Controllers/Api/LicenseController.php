@@ -26,6 +26,8 @@ class LicenseController extends Controller
     /// because our client's application is hardcoded and developer of that
     /// Doesn't change these keys to something that is in
     /// our database, so I change my code to that keys !!
+    /// if you don't understand what is going on here, i must tell you me ether!
+    /// it's all just because client want's this and nobody listens to my advices.
     ///
     //////////////////////////////////////////////////////
 
@@ -34,8 +36,8 @@ class LicenseController extends Controller
     {
         $product = Product::where('name', $request->product_name)->first();
 
-        if ($request->license == 'trial') {
-            $last_used_licence = UsedLicence::where('fingerprint', $request->machine_fingerprint)->whereHas('key', function ($query) use ($product) {
+        if ($request->license == '‫‪TRIAL‬‬') {
+            $last_used_licence = UsedLicence::where('fingerprint', $request->machine_fingerprint)->whereHas('license', function ($query) use ($product) {
                 $query->where('product_id', $product->id);
             })->first();
 
@@ -89,17 +91,23 @@ class LicenseController extends Controller
             LogService::log('reuse_license', $license, null, ['fingerprint' => $request->machine_fingerprint]);
         } else {
             // First use
-            $license->update([
-                'expires_at' => LicenseService::getExpireDate($license->type)
-            ]);
-            LogService::log('first_use', $license, null, ['fingerprint' => $request->machine_fingerprint]);
-        }
+            $this->validate($request, [
+                'first_name' => 'required|string|max:250',
+                'last_name' => 'required|string|max:250',
+                'country' => 'required|string|max:250',
+                'company_name' => 'nullable|string|max:250',
+                'email' => 'required|email|max:250',
+                'phone_number' => ['required', function ($attribute, $value, $fail) {
+                    if (!MobileService::validate($value, false)['status']) {
+                        foreach (MobileService::validate($value, false)['errors'] as $error) {
+                            $fail($error);
+                        }
+                    }
 
-        DB::beginTransaction();
-        try {
-            do {
-                $username = HashService::rand(15);
-            } while (UsedLicence::where('username', $username)->count());
+                    return true;
+                }],
+                'city' => 'required|string|max:250',
+            ]);
 
             $license->update([
                 'first_name' => $request->first_name,
@@ -109,7 +117,17 @@ class LicenseController extends Controller
                 'country' => $request->country,
                 'city' => $request->city,
                 'company' => $request->company_name,
+                'expires_at' => LicenseService::getExpireDate($license->type)
             ]);
+
+            LogService::log('first_use', $license, null, ['fingerprint' => $request->machine_fingerprint]);
+        }
+
+        DB::beginTransaction();
+        try {
+            do {
+                $username = HashService::rand(15);
+            } while (UsedLicence::where('username', $username)->count());
 
             $used_licence = UsedLicence::firstOrCreate([
                 'license_id' => $license->id,
@@ -132,7 +150,7 @@ class LicenseController extends Controller
             'message' => 'You can use this license',
             'data' => [
                 'license' => $license->key,
-                'license_type' => $license->type,
+                'license_type' => $this->getLicenseTypeMonthNumber($license->type),
                 'product_name' => $license->product->name,
                 'active_date' => Carbon::parse($license->used()->get()->first()->created_at)->timestamp,
                 'expire_date' => Carbon::parse($license->expires_at)->setTime(23, 59, 59)->timestamp,
@@ -163,25 +181,21 @@ class LicenseController extends Controller
 
         if ($license->product->name != $request->product_name) {
             // Wrong product name
-            LogService::log('wrong_product_name', $license, null, $request->validated());
             return response(['message' => 'Product name is incorrect', 'errors' => ['product_name' => 'این لایسنس با این محصول مطابقت ندارد']], 482);
         }
 
         if (!$license->status) {
             // Inactive license
-            LogService::log('inactive_license', $license, null, ['fingerprint' => $request->machine_fingerprint]);
             return response(['message' => 'Inactive license', 'errors' => ['key' => 'لایسنس مورد نظر غیر فعال است و امکان استفاده از آن مقدور نیست.']], 483);
         }
 
         if (Carbon::parse($license->expires_at)->setTime(23, 59, 59)->isPast()) {
             // Expired license
-            LogService::log('expired_license', $license, null, ['fingerprint' => $request->machine_fingerprint]);
             return response(['message' => 'Expired license', 'errors' => ['key' => 'مهلت استفاده از این لاینس به پایان رسیده است']], 484);
         }
 
         if (now()->diffInDays($license->created_at) > config('settings.license_deadline_for_use')) {
             // Can not use this license after deadline
-            LogService::log('can_not_use_license_after_deadline', $license, null, $request->validated());
             return response(['message' => 'Can not use this license after deadline', 'errors' => ['key' => 'امکان استفاده از این لایسنس تنها تا ' . config('settings.license_deadline_for_use') . ' روز بعد از ایجاد آن وجود دارد.']], 487);
         }
 
@@ -189,7 +203,6 @@ class LicenseController extends Controller
             $last_used_fingerprints = array_unique($license->used->pluck('fingerprint')->toArray());
             if (!in_array($request->machine_fingerprint, $last_used_fingerprints) and count($last_used_fingerprints) >= $license->max_use) {
                 // Over use
-                LogService::log('over_use_license', $license, null, ['fingerprint' => $request->machine_fingerprint]);
                 return response(['message' => 'Overused license', 'errors' => ['key' => 'حداکثر استفاده از این لاینس به پایان رسیده و استفاده از این لایسنس برای این دستگاه مقدور نیست']], 485);
             }
         }
@@ -198,9 +211,22 @@ class LicenseController extends Controller
             'message' => 'You can use this license',
             'data' => [
                 'license' => $license->key,
-                'license_type' => $license->type,
-                'machine_fingerprint' => $request->fingerprint
+                'license_type' => $this->getLicenseTypeMonthNumber($license->type),
+                'machine_fingerprint' => $request->machine_fingerprint
             ]
         ]);
+    }
+
+    public function getLicenseTypeMonthNumber($license_type)
+    {
+        if ($license_type == 'trial') return 'TRIAL';
+
+        $type_array = explode('_', $license_type);
+
+        if ($type_array[1] == 'year') {
+            return intval($type_array[0]) * 12;
+        }
+
+        return intval($type_array[0]);
     }
 }

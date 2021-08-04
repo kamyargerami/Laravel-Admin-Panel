@@ -23,7 +23,7 @@ class LicenseController extends Controller
     public function getResultQuery(Request $request)
     {
         return License::with('user', 'product')->where(function ($query) use ($request) {
-            foreach (['id', 'user_id', 'product_id', 'key', 'email'] as $column) {
+            foreach (['id', 'user_id', 'product_id', 'key', 'email', 'type'] as $column) {
                 if ($request->get($column)) {
                     $query->where($column, $request->get($column));
                 }

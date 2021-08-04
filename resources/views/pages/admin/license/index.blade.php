@@ -66,7 +66,15 @@
                                                value="{{old('to_created', request('to_created'))}}">
                                     </div>
                                     <div class="col-lg-2 mb-2">
-                                        @include('partials.order-by',['order_by' => ['created_at', 'updated_at', 'max_use', 'type']])
+                                        <select name="type" class="form-select">
+                                            <option value="">-- نوع لایسنس --</option>
+                                            @foreach(\App\Models\License::Types as $type)
+                                                <option
+                                                    value="{{$type}}" {{request('type') == $type ? 'selected' : ''}}>
+                                                    {{__('types.license.' . $type)}}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="col-lg-2 mb-2">
                                         <input type="text" placeholder="از انقضا" name="from_expires" autocomplete="off"
@@ -112,6 +120,9 @@
                                     <div class="col-lg-2 mb-2">
                                         <input type="email" placeholder="ایمیل مشتری" name="email" autocomplete="off"
                                                class="form-control" value="{{old('email', request('email'))}}">
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
+                                        @include('partials.order-by',['order_by' => ['created_at', 'updated_at', 'max_use', 'type']])
                                     </div>
                                     <div class="col-lg-2 mb-2">
                                         <button type="submit" class="btn btn-primary w-100">
