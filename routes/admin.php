@@ -34,6 +34,7 @@ Route::group(['prefix' => 'license'], function () {
 
     Route::get('export', 'LicenseController@export')->name('license.export');
     Route::post('multi-update', 'LicenseController@multiUpdate')->name('license.multi-update');
+    Route::get('multi-delete', 'LicenseController@multiDelete')->name('license.multi-delete');
 
     Route::get('used/{license_id}', 'LicenseController@used')->name('license.used');
 });

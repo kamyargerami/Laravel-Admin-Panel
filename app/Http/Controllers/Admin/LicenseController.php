@@ -196,6 +196,29 @@ class LicenseController extends Controller
         return back()->with('success', 'لایسنس های مورد نظر ویرایش شدند.');
     }
 
+    public function multiDelete(Request $request)
+    {
+        $this->getResultQuery($request)->chunk(200, function ($licenses) {
+            foreach ($licenses as $license) {
+                $count_used_licences = $license->used()->count();
+
+                if ($count_used_licences) {
+                    return back()->withErrors(['این لایسنس مشتری دارد و شما مجاز به حذف آن نیستید، ابتدا رکورد مشتریان این لایسنس را پاک کنید']);
+                }
+
+                if (auth()->user()->cannot('delete_others_data') and $license->user_id != auth()->id()) {
+                    return back()->withErrors(['شما دسترسی حذف لایسنس برای افراد دیگر را ندارید']);
+                }
+
+                LogService::log('license_deleted', $license, auth()->id());
+
+                $license->delete();
+            }
+        });
+
+        return back()->with('success', 'لایسنس  ها با موفقیت حذف شدند');
+    }
+
     public function used($license_id)
     {
         $license = License::findOrFail($license_id);

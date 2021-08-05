@@ -274,7 +274,7 @@
             <div class="row justify-content-center">
                 @can('admin.license.export')
                     <div class="col-12 col-lg-3 mb-2">
-                        <button type="button" class="btn btn-outline-primary pull-left w-100" id="export_btn">
+                        <button type="button" class="btn btn-outline-primary w-100" id="export_btn">
                             خروجی
                             <i class="fa fa-download pe-2"></i>
                         </button>
@@ -283,10 +283,19 @@
 
                 @can('admin.license.multi-update')
                     <div class="col-12 col-lg-3 mb-2">
-                        <button type="button" class="btn btn-outline-success pull-left w-100" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-outline-success w-100" data-bs-toggle="modal"
                                 data-bs-target="#multiEditModal">
                             تغییر گروهی
                             <i class="fa fa-edit pe-2"></i>
+                        </button>
+                    </div>
+                @endcan
+
+                @can('admin.license.multi-update')
+                    <div class="col-12 col-lg-3 mb-2">
+                        <button type="button" class="btn btn-outline-danger w-100" id="multi_delete_btn">
+                            حذف گروهی
+                            <i class="fa fa-trash pe-2"></i>
                         </button>
                     </div>
                 @endcan
@@ -303,6 +312,10 @@
     <script>
         $('#export_btn').click(function () {
             window.location = '/admin/license/export?' + $('form#search').serialize();
+        });
+
+        $('#multi_delete_btn').click(function () {
+            window.location = '/admin/license/multi-delete?' + $('form#search').serialize();
         });
     </script>
 @endsection
