@@ -28,7 +28,7 @@ class DownloadController extends Controller
 
         if (!$license->status) {
             // Inactive license
-            return response(['message' => 'Inactive license', 'errors' => ['key' => 'لایسنس مورد نظر غیر فعال است و امکان استفاده از آن مقدور نیست.']], 483);
+            return response(['message' => 'License is not active'], 483);
         }
 
         $file_path = 'files/' . $license->product->name . '/' . $request->file;
