@@ -166,6 +166,7 @@ class LicenseController extends Controller
                 'device_name' => $used_licence->device_name,
                 'username' => $used_licence->username,
                 'password' => $used_licence->password,
+                'is_active' => true
             ]
         ]);
     }
