@@ -291,7 +291,7 @@
                     </div>
                 @endcan
 
-                @can('admin.license.multi-update')
+                @can('admin.license.multi-delete')
                     <div class="col-12 col-lg-3 mb-2">
                         <button type="button" class="btn btn-outline-danger w-100" id="multi_delete_btn">
                             حذف گروهی
