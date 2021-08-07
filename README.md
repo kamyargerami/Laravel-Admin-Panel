@@ -60,3 +60,22 @@ npm run prod
 
 #### Dont commit any css or js library in public folder.
 if you need extra library into your page that cannot be used by a CDN, you can move it into plugins directory in public folder.
+
+## Localization
+
+all translate files are placed in the resources/lang directory.
+
+for change translate auth emails you can edit fa.json file and other email translations are stored in email.php file in fa directory.
+
+all sms texts are stored in sms.php in fa directory.
+
+all errors texts are stored in validation.php in fa directory
+
+# Configuration - .env file
+all of critical settins are in .env file.
+
+## Security 
+never change APP_ENV from "production" to anything else in .env file, that disables all the securiry check in admin panel
+
+## Mail Settings
+you can easily change your mail server credentials in .env file

@@ -56,6 +56,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'home_page' => env('HOME_PAGE', 'https://arsamsoft.com'),
+    
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

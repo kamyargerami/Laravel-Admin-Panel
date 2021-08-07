@@ -10,6 +10,7 @@ use App\Http\Requests\Api\CheckLicenceRequest;
 use App\Models\License;
 use App\Models\Product;
 use App\Models\UsedLicence;
+use App\Services\Email;
 use App\Services\HashService;
 use App\Services\LicenseService;
 use App\Services\LogService;
@@ -121,6 +122,7 @@ class LicenseController extends Controller
             ]);
 
             LogService::log('first_use', $license, null, ['fingerprint' => $request->machine_fingerprint]);
+            Email::send($license->email, __('email.first_use_for_license.text', ['name' => $license->fullName]), __('email.first_use_for_license.subject'), __('email.first_use_for_license.button'), __('email.first_use_for_license.link'));
         }
 
         DB::beginTransaction();
