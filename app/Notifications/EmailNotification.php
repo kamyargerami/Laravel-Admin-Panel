@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
 
 class EmailNotification extends Notification implements ShouldQueue
 {
@@ -51,7 +52,7 @@ class EmailNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->line($this->text)
+            ->line(new HtmlString(nl2br($this->text)))
             ->subject($this->subject)
             ->action($this->button_text, $this->button_link);
     }

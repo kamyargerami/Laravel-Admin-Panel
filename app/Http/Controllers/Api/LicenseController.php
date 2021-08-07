@@ -17,6 +17,7 @@ use App\Services\LogService;
 use App\Services\MobileService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Morilog\Jalali\Jalalian;
 
 class LicenseController extends Controller
 {
@@ -122,7 +123,7 @@ class LicenseController extends Controller
             ]);
 
             LogService::log('first_use', $license, null, ['fingerprint' => $request->machine_fingerprint]);
-            Email::send($license->email, __('email.first_use_for_license.text', ['name' => $license->fullName]), __('email.first_use_for_license.subject'), __('email.first_use_for_license.button'), __('email.first_use_for_license.link'));
+            Email::send($license->email, __('email.first_use_for_license.text', ['name' => $license->fullName, 'product' => $product->name, 'key' => $license->key, 'expires_at' => Jalalian::fromDateTime($license->expires_at)->format('Y/m/d')]), __('email.first_use_for_license.subject'), __('email.first_use_for_license.button'), __('email.first_use_for_license.link'));
         }
 
         DB::beginTransaction();
