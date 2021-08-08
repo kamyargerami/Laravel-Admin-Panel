@@ -8,7 +8,7 @@ class HashService
 {
     public static function rand($length = 25)
     {
-        $characters = '23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';
+        $characters = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
 
