@@ -28,6 +28,17 @@
                                                value="{{old('to_id', request('to_id'))}}" min="0" autocomplete="off">
                                     </div>
                                     <div class="col-lg-2 mb-2">
+                                        <select name="type" class="form-select">
+                                            <option value="">-- نوع لایسنس --</option>
+                                            @foreach(\App\Models\License::Types as $type)
+                                                <option
+                                                    value="{{$type}}" {{request('type') == $type ? 'selected' : ''}}>
+                                                    {{__('types.license.' . $type)}}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2 mb-2">
                                         <select name="product_id" class="form-select">
                                             <option value="">-- محصول --</option>
                                             @foreach($products as $product)
@@ -64,17 +75,6 @@
                                         <input type="text" placeholder="تا ایجاد" name="to_created" autocomplete="off"
                                                class="form-control pdate"
                                                value="{{old('to_created', request('to_created'))}}">
-                                    </div>
-                                    <div class="col-lg-2 mb-2">
-                                        <select name="type" class="form-select">
-                                            <option value="">-- نوع لایسنس --</option>
-                                            @foreach(\App\Models\License::Types as $type)
-                                                <option
-                                                    value="{{$type}}" {{request('type') == $type ? 'selected' : ''}}>
-                                                    {{__('types.license.' . $type)}}
-                                                </option>
-                                            @endforeach
-                                        </select>
                                     </div>
                                     <div class="col-lg-2 mb-2">
                                         <input type="text" placeholder="از انقضا" name="from_expires" autocomplete="off"
@@ -157,13 +157,13 @@
                 <table class="table table-bordered">
                     <tr>
                         <th>#</th>
+                        <th>کلید</th>
+                        <th>محصول</th>
                         <th>نوع</th>
                         <th>وضعیت</th>
                         <th>حداکثر استفاده مجاز</th>
                         <th>استفاده شده</th>
-                        <th>محصول</th>
                         <th>ادمین/نماینده</th>
-                        <th>کلید</th>
                         <th>ایجاد</th>
                         <th>اولین استفاده</th>
                         <th>انقضا</th>
@@ -172,6 +172,8 @@
                     @foreach($licenses as $license)
                         <tr>
                             <td>{{$license->id}}</td>
+                            <td>{{$license->key}}</td>
+                            <td>{{$license->product->name}}</td>
                             <td>{{__('types.license.' . $license->type)}}</td>
                             <td>
                                 @if($license->status)
@@ -209,9 +211,7 @@
                                     0
                                 @endif
                             </td>
-                            <td>{{$license->product->name}}</td>
                             <td>{{$license->user->name}}</td>
-                            <td>{{$license->key}}</td>
                             <td>{{\Morilog\Jalali\Jalalian::fromDateTime($license->created_at)->format('Y-m-d')}}</td>
                             <td>{{$license->used->first() ? \Morilog\Jalali\Jalalian::fromDateTime($license->used->first()->created_at)->format('Y-m-d') : '--'}}</td>
                             <td>{{$license->expires_at ? \Morilog\Jalali\Jalalian::fromDateTime($license->expires_at)->format('Y-m-d') : '--'}}</td>

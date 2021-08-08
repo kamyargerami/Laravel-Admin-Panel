@@ -94,12 +94,26 @@ class LicenseController extends Controller
             return back()->withErrors(['شما دسترسی ایجاد لایسنس برای افراد دیگر را ندارید']);
         }
 
+        $first_id = null;
+        $last_id = null;
+
         for ($i = 0; $i < $request->quantity; $i++) {
             $license = LicenseService::create($request->type, $request->max_use, $request->user_id, $request->status, $request->product_id, $request->character_length);
             LogService::log('new_license', $license, auth()->id());
+
+            if ($i == 0)
+                $first_id = $license->id;
+
+            if ($i == $request->quantity - 1)
+                $last_id = $license->id;
         }
 
-        return back()->with('success', 'لایسنس های جدید با موفقیت اضافه شد');
+        return redirect()->route('admin.license.list')->with([
+            'success' => 'لایسنس های جدید با موفقیت اضافه شد',
+        ])->withInput([
+            'from_id' => $first_id,
+            'to_id' => $last_id,
+        ]);
     }
 
     public function edit(License $license)
