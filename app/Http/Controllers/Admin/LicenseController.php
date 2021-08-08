@@ -108,12 +108,10 @@ class LicenseController extends Controller
                 $last_id = $license->id;
         }
 
-        return redirect()->route('admin.license.list')->with([
-            'success' => 'لایسنس های جدید با موفقیت اضافه شد',
-        ])->withInput([
+        return redirect()->route('admin.license.list', [
             'from_id' => $first_id,
             'to_id' => $last_id,
-        ]);
+        ])->with(['success' => 'لایسنس های جدید با موفقیت اضافه شد']);
     }
 
     public function edit(License $license)
