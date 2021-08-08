@@ -304,7 +304,7 @@
                     <div class="col-12 col-lg-3 mb-2">
                         <button class="btn btn-outline-dark w-100" data-bs-toggle="modal"
                                 data-bs-target="#notifyModal">
-                            ارسال پیام به کاربران
+                            ارسال پیام به مشتریان
                         </button>
                     </div>
                 @endcan

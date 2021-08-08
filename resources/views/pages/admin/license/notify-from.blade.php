@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">ارسال پیام به کاربران</h5>
+                <h5 class="modal-title">ارسال پیام به مشتریان</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{route('admin.license.notification.send')}}" method="post">
@@ -14,7 +14,7 @@
 
                 <div class="modal-body">
                     <textarea class="form-control" rows="5" name="text"
-                              placeholder="متن مورد نظر برای ارسال به کاربران" required>{{old('text')}}</textarea>
+                              placeholder="متن مورد نظر برای ارسال به مشتریان" required>{{old('text')}}</textarea>
 
                     <div class="row mt-3">
                         <div class="col-md-8">
