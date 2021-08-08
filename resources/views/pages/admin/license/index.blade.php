@@ -299,12 +299,25 @@
                         </button>
                     </div>
                 @endcan
+
+                @can('admin.license.notification.send')
+                    <div class="col-12 col-lg-3 mb-2">
+                        <button class="btn btn-outline-dark w-100" data-bs-toggle="modal"
+                                data-bs-target="#notifyModal">
+                            ارسال پیام به کاربران
+                        </button>
+                    </div>
+                @endcan
             </div>
         </div>
     </div>
 
     @can('admin.license.multi-update')
         @include('pages.admin.license.multi-edit')
+    @endcan
+
+    @can('admin.license.notification.send')
+        @include('pages.admin.license.notify-from')
     @endcan
 @endsection
 

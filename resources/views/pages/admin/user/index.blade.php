@@ -138,7 +138,7 @@
         <div class="card-footer">
             @include('partials.paginate', ['pages' => $users])
         </div>
-        @can('admin.notification.send')
+        @can('admin.user.notification.send')
             <div class="card-body">
                 <div class="row justify-content-center">
                     <div class="col-lg-3">

@@ -5,15 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AddLicenceRequest;
 use App\Http\Requests\Admin\MultiUpdateRequest;
+use App\Http\Requests\Admin\SendNotificationRequest;
 use App\Http\Requests\Admin\UpdateLicenceRequest;
 use App\Models\License;
 use App\Models\Product;
 use App\Models\UsedLicence;
 use App\Models\User;
+use App\Services\Email;
 use App\Services\Helper;
 use App\Services\LicenseService;
 use App\Services\LogService;
 use App\Services\MobileService;
+use App\Services\SMS;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -242,5 +245,23 @@ class LicenseController extends Controller
         $used_licenses = UsedLicence::where(['license_id' => $license->id])->orderByDesc('id')->get();
 
         return view('pages.admin.license.used', compact('used_licenses', 'license'));
+    }
+
+    public function sendNotification(SendNotificationRequest $request)
+    {
+        $on = Carbon::parse($request->date)->setTime($request->hour, $request->minute, 0)->toDate();
+
+        $this->getResultQuery($request)->chunk(100, function ($licenses) use ($request, $on) {
+            foreach ($licenses as $license) {
+                if (in_array('sms', $request->methods ?: [])) {
+                    SMS::send($license->phone, $request->text, null, $on);
+                }
+                if (in_array('email', $request->methods ?: [])) {
+                    Email::send($license->email, $request->text, $request->subject, $request->button_text, $request->button_link, $on);
+                }
+            }
+        });
+
+        return back()->with('success', 'نوتیفیکیشن ها ارسال شد');
     }
 }
