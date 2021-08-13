@@ -4,6 +4,6 @@
     </p>
 
     <div class="d-flex justify-content-center mt-3">
-        {{$pages->appends(request()->all())->links()}}
+        {{$pages->appends(request()->all())->onEachSide(0)->links()}}
     </div>
 </div>
