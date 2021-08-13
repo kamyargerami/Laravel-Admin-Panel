@@ -76,6 +76,8 @@ class UserController extends Controller
 
         LogService::log('new_user', $user, auth()->id());
 
+        $user->sendEmailVerificationNotification();
+
         return back()->with('success', 'کاربر جدید با موفقیت اضافه شد');
     }
 
@@ -99,6 +101,7 @@ class UserController extends Controller
         if ($request->email != $user->email) {
             $data['email'] = $request->email;
             $data['email_verified_at'] = null;
+            $email_updated = true;
         }
         if ($request->mobile != $user->mobile) {
             $data['mobile'] = MobileService::generate($request->mobile);
@@ -116,6 +119,10 @@ class UserController extends Controller
         if (array_diff($request->roles, auth()->user()->roles()->pluck('name')->toArray())) {
             LogService::log('update_roles', $user, auth()->id(), $request->roles);
             $user->syncRoles($request->roles);
+        }
+
+        if (isset($email_updated)) {
+            $user->sendEmailVerificationNotification();
         }
 
         return back()->with('success', 'کاربر با موفقیت ویرایش شد');
