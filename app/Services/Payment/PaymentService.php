@@ -28,9 +28,9 @@ class PaymentService extends Service
             $this->gateway = new ZarinpalGateway();
     }
 
-    public function redirect($amount, $details = null, $parameters = []): array
+    public function redirect($amount, $callback, $description = null, $mobile = null, $email = null): array
     {
-        return $this->gateway->redirect($amount, $details, $parameters);
+        return $this->gateway->redirect($amount, $callback, $description, $mobile, $email);
     }
 
     public function verify(Request $request): array
