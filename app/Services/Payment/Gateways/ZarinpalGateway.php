@@ -82,8 +82,8 @@ class ZarinpalGateway extends Gateway
         } elseif ($transaction->status == 'success') {
             return [
                 'status' => false,
-                'code' => 2,
-                'message' => 'تراکنش از قبل پرداخت شده و امکان پرداخت آن وجود ندارد'
+                'code' => 3,
+                'message' => 'تراکنش از قبل پرداخت شده و امکان پرداخت مجدد آن وجود ندارد'
             ];
         }
 
