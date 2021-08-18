@@ -17,7 +17,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->bigInteger('amount');
             $table->enum('status', ['pending', 'success', 'cancel']);
-            $table->enum('gateway', ['mellat', 'parsian', 'saman', 'parsian', 'pasargad', 'sadad', 'irankish', 'zarinpal', 'idpay', 'payping', 'payir', 'nextpay', 'zibal'])->default('mellat');
+            $table->enum('gateway', ['mellat', 'parsian', 'saman', 'pasargad', 'sadad', 'irankish', 'zarinpal', 'idpay', 'payping', 'payir', 'nextpay', 'zibal'])->default('mellat');
             $table->string('ref_id')->nullable();
             $table->integer('status_code')->nullable();
             $table->string('card')->nullable();

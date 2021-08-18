@@ -27,7 +27,7 @@ class ZarinpalGateway extends Gateway
     public function redirect($amount, $callback, $description = null, $mobile = null, $email = null): array
     {
         try {
-            Transaction::create([
+            $transaction = Transaction::create([
                 'status' => 'pending',
                 'gateway' => config('payment.default'),
                 'amount' => $amount,
@@ -41,7 +41,7 @@ class ZarinpalGateway extends Gateway
                 'Description' => $description,
                 'Email' => $email,
                 'Mobile' => $mobile,
-                'CallbackURL' => $callback,
+                'CallbackURL' => $callback . (strpos($callback, '?') ? '&' : '?') . http_build_query(['transaction_id' => $transaction->id, 'amount' => $transaction->amount])
             ]);
 
             $code = intval($result->Status);
