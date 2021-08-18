@@ -7,7 +7,7 @@
         <div class="sidebar-brand">
             <a href="/">
                 <img src="{{asset('images/logo-light.png')}}" class="img-fluid me-2" width="35px">
-                <span class="font-22 text-white">آرسام سافت</span>
+                <span class="font-22 text-white">پنل ادمین</span>
             </a>
             <div id="close-sidebar">
                 <i class="fa fa-times"></i>
@@ -16,22 +16,6 @@
 
         <div class="sidebar-menu">
             <ul>
-                @can('admin.license.list')
-                    <li>
-                        <a href="{{route('admin.license.list')}}">
-                            <i class="fa fa-copyright"></i>
-                            <span>لایسنس</span>
-                        </a>
-                    </li>
-                @endcan
-                @can('admin.product.list')
-                    <li>
-                        <a href="{{route('admin.product.list')}}">
-                            <i class="fa fa-product-hunt"></i>
-                            <span>محصولات</span>
-                        </a>
-                    </li>
-                @endcan
                 @can('admin.user.list')
                     <li>
                         <a href="{{route('admin.user.list')}}">

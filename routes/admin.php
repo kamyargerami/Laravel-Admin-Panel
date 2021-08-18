@@ -26,32 +26,6 @@ Route::group(['prefix' => 'log'], function () {
     Route::get('details/{log}', 'LogController@details')->name('log.details');
 });
 
-Route::group(['prefix' => 'license'], function () {
-    Route::get('/', 'LicenseController@index')->name('license.list');
-    Route::get('add', 'LicenseController@add')->name('license.add');
-    Route::post('add', 'LicenseController@store')->name('license.store');
-    Route::get('edit/{license}', 'LicenseController@edit')->name('license.edit');
-    Route::post('edit/{license}', 'LicenseController@update')->name('license.update');
-    Route::get('delete/{license}', 'LicenseController@delete')->name('license.delete');
-
-    Route::get('export', 'LicenseController@export')->name('license.export');
-    Route::post('multi-update', 'LicenseController@multiUpdate')->name('license.multi-update');
-    Route::get('multi-delete', 'LicenseController@multiDelete')->name('license.multi-delete');
-
-    Route::get('used/{license_id}', 'LicenseController@used')->name('license.used');
-
-    Route::post('notification', 'LicenseController@sendNotification')->name('license.notification.send');
-});
-
-Route::group(['prefix' => 'product'], function () {
-    Route::get('/', 'ProductController@index')->name('product.list');
-    Route::get('add', 'ProductController@add')->name('product.add');
-    Route::post('add', 'ProductController@store')->name('product.store');
-    Route::get('edit/{product}', 'ProductController@edit')->name('product.edit');
-    Route::post('edit/{product}', 'ProductController@update')->name('product.update');
-    Route::get('delete/{product}', 'ProductController@delete')->name('product.delete');
-});
-
 Route::group(['prefix' => 'notification'], function () {
     Route::get('/', 'NotificationController@index')->name('notification.index');
 });

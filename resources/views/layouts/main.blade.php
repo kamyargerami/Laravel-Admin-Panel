@@ -11,7 +11,7 @@
     <meta name="author" content="Webrang">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{mix('/css/app.css')}}">
-    <link rel="icon" type="image/jpg" href="{{asset('images/favicon.jpg')}}">
+    <link rel="icon" type="image/jpg" href="{{asset('images/favicon.png')}}">
     @yield('style')
 </head>
 <body>

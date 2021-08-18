@@ -17,8 +17,8 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name' => 'آرسام سافت',
-            'email' => 'info@arsamsoft.com',
+            'name' => 'admin',
+            'email' => 'info@example.com',
             'email_verified_at' => Carbon::now()->toDateTimeString(),
             'password' => Hash::make('secret'),
         ]);

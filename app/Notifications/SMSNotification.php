@@ -47,10 +47,9 @@ class SMSNotification extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        $data['text'] = $this->text;
-
-        if ($this->template) $data['template'] = $this->template;
-
-        return $data;
+        return [
+            'text' => $this->text,
+            'template' => $this->template
+        ];
     }
 }
