@@ -1,4 +1,8 @@
-# Admin Panel
+# Laravel Admin Panel
+
+This is a boilerplate for a simple Laravel admin panel using Boostrap5.
+You can clone this project to have and login and register form with admin panel and ACL permissions check.
+Also, you have iranian sms providers and gateways by default.
 
 ## Installation
 
