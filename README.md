@@ -4,6 +4,8 @@ This is a boilerplate for a simple Laravel admin panel using Boostrap5.
 You can clone this project to have and login and register form with admin panel and ACL permissions check.
 Also, you have iranian sms providers and gateways by default.
 
+![ScreenShot](screenshot.png)
+
 ## Installation
 
 ```
@@ -76,7 +78,7 @@ all sms texts are stored in sms.php in fa directory.
 all errors texts are stored in validation.php in fa directory
 
 # Configuration - .env file
-all of critical settins are in .env file.
+all of critical settings are in .env file.
 
 ## Security 
 never change APP_ENV from "production" to anything else in .env file, that disables all the securiry check in admin panel
