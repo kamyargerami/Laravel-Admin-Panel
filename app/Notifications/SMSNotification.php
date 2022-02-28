@@ -11,7 +11,7 @@ class SMSNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $text, $template, $receiver;
+    public $text, $template;
 
     /**
      * Create a new notification instance.
